@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { XYPosition } from "reactflow";
 import { XSta, useXState } from "xsta";
+import { SmartEdge } from "./smart-edge";
 
 interface UseDraggableParams {
   onDragStart?: VoidFunction;
@@ -21,6 +22,17 @@ export const useDraggable = (props: UseDraggableParams & { id?: string }) => {
 
   const getIsDragging = () => XSta.get(isDraggingKey);
   const getStartPosition = () => XSta.get(startPositionKey);
+
+  useEffect(() => {
+    return () => {
+      const reuseID = SmartEdge.draggingEdge?.dragId === id;
+      if (!reuseID) {
+        // dispose states
+        XSta.delete(isDraggingKey);
+        XSta.delete(startPositionKey);
+      }
+    };
+  }, []);
 
   const onDragStart = (event: MouseEvent) => {
     if (getIsDragging()) {

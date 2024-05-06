@@ -1,7 +1,7 @@
 import { EdgeLabelRenderer, Position } from "reactflow";
 
 import { getLineCenter, ILine } from "@/layout/edge/edge";
-import { ControlPoint, isEqualPoint } from "@/layout/edge/point";
+import { ControlPoint } from "@/layout/edge/point";
 import { kReactflow } from "@/states/reactflow";
 import { getEdgeContext, SmartEdge } from "./smart-edge";
 import { useDraggable } from "./useDraggable";
@@ -47,9 +47,8 @@ export const EdgeController = ({ edge }: { edge: SmartEdge }) => {
   const center = getLineCenter(start, end);
   const isHorizontal = start.y === end.y;
 
-  const isDraggingEdge =
-    SmartEdge.draggingEdge &&
-    isEqualPoint(SmartEdge.draggingEdge?.start, edge.start);
+  const isDraggingEdge = edge.start.id === SmartEdge.draggingEdge?.start.id;
+
   const dragId = isDraggingEdge ? SmartEdge.draggingEdge.dragId : undefined;
   const { dragRef } = useDraggable({
     id: dragId,

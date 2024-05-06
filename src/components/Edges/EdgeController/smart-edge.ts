@@ -217,6 +217,7 @@ export class SmartEdge {
         SmartEdge.draggingEdge.isTemp = true;
         return this.ctx.points;
       }
+      SmartEdge.draggingEdge.isTemp = false;
       return [
         ...startPoints,
         { id: uuid(), x: from.start.x + offset, y: from.start.y },
@@ -239,6 +240,7 @@ export class SmartEdge {
         SmartEdge.draggingEdge.isTemp = true;
         return this.ctx.points;
       }
+      SmartEdge.draggingEdge.isTemp = false;
       return [
         ...startPoints,
         { id: uuid(), x: from.start.x, y: from.start.y + offset },
