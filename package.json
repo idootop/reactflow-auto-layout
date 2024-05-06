@@ -1,19 +1,27 @@
 {
   "name": "reactflow-auto-layout",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dagrejs/dagre": "^1.1.2",
+    "d3-dag": "^1.1.0",
+    "d3-hierarchy": "^3.1.2",
+    "elkjs": "^0.9.3",
+    "leva": "^0.9.35",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "reactflow": "^11.11.3",
+    "xsta": "^2.0.0"
   },
   "devDependencies": {
+    "@types/d3-hierarchy": "^3.1.7",
+    "@types/node": "^20.12.8",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

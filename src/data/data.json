@@ -1,0 +1,83 @@
+{
+  "nodes": [
+    {
+      "id": "A",
+      "type": "base"
+    },
+    {
+      "id": "B",
+      "type": "base"
+    },
+    {
+      "id": "C",
+      "type": "base"
+    },
+    {
+      "id": "D",
+      "type": "base"
+    },
+    {
+      "id": "E",
+      "type": "base"
+    },
+    {
+      "id": "F",
+      "type": "base"
+    },
+    {
+      "id": "G",
+      "type": "base"
+    }
+  ],
+  "edges": [
+    {
+      "id": "A#B#0",
+      "source": "A",
+      "target": "B",
+      "sourceHandle": "A#source#0",
+      "targetHandle": "B#target#0"
+    },
+    {
+      "id": "A#D#1",
+      "source": "A",
+      "target": "D",
+      "sourceHandle": "A#source#1",
+      "targetHandle": "D#target#0"
+    },
+    {
+      "id": "A#C#2",
+      "source": "A",
+      "target": "C",
+      "sourceHandle": "A#source#2",
+      "targetHandle": "C#target#0"
+    },
+    {
+      "id": "B#E#0",
+      "source": "B",
+      "target": "E",
+      "sourceHandle": "B#source#0",
+      "targetHandle": "E#target#0"
+    },
+    {
+      "id": "D#E#0",
+      "source": "D",
+      "target": "E",
+      "sourceHandle": "D#source#0",
+      "targetHandle": "E#target#0"
+    },
+    {
+      "id": "E#F#0",
+      "source": "E",
+      "target": "F",
+      "sourceHandle": "E#source#0",
+      "targetHandle": "F#target#0"
+    },
+    {
+      "id": "E#G#1",
+      "source": "E",
+      "target": "G",
+      "sourceHandle": "E#source#0",
+      "targetHandle": "G#target#0"
+    }
+  ]
+}
