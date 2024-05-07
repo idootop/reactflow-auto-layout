@@ -50,12 +50,6 @@ export const useEdgeDraggable = (props: UseDraggableParams) => {
   }, []);
 
   const onDragStart = (event: MouseEvent) => {
-    SmartEdge.draggingEdge = {
-      dragId,
-      dragFrom,
-      start: propsRef.current.edge.start,
-      end: propsRef.current.edge.end,
-    };
     if (getIsDragging()) {
       return;
     }
@@ -67,6 +61,12 @@ export const useEdgeDraggable = (props: UseDraggableParams) => {
       // 点击当前元素
       return;
     }
+    SmartEdge.draggingEdge = {
+      dragId,
+      dragFrom,
+      start: propsRef.current.edge.start,
+      end: propsRef.current.edge.end,
+    };
     setIsDragging(true);
     setStartPosition([event.clientX, event.clientY]);
     propsRef.current.onDragStart?.();
@@ -76,6 +76,7 @@ export const useEdgeDraggable = (props: UseDraggableParams) => {
     if (!getIsDragging()) {
       return;
     }
+    SmartEdge.draggingEdge = undefined;
     setIsDragging(false);
     propsRef.current.onDragEnd?.();
   };
