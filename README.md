@@ -2,6 +2,8 @@
 
 A demo showcasing the auto layout and edge editing capabilities of ReactFlow.
 
+👉 View Demo: [https://reactflow-auto-layout.vercel.app](https://reactflow-auto-layout.vercel.app/)
+
 ## ✨ Highlights
 
 ### 1. Node Auto Layout
