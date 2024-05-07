@@ -3,8 +3,9 @@ import { EdgeLabelRenderer, Position } from "reactflow";
 import { getLineCenter, ILine } from "@/layout/edge/edge";
 import { ControlPoint } from "@/layout/edge/point";
 import { kReactflow } from "@/states/reactflow";
+import { uuid } from "@/utils/uuid";
 import { getEdgeContext, SmartEdge } from "./smart-edge";
-import { useDraggable } from "./useDraggable";
+import { useEdgeDraggable } from "./useEdgeDraggable";
 
 export interface EdgeControllersParams {
   id: string;
@@ -33,9 +34,9 @@ export const EdgeControllers = (props: EdgeControllersParams) => {
 
   return (
     <>
-      {edges.map((e, idx) => {
+      {edges.map((_, idx) => {
         const edge = smartEdges[idx];
-        return edge.canDrag && <EdgeController key={e.start.id} edge={edge} />;
+        return edge.canDrag && <EdgeController key={uuid()} edge={edge} />; // use uuid to force rebuild EdgeController
       })}
     </>
   );
@@ -47,12 +48,9 @@ export const EdgeController = ({ edge }: { edge: SmartEdge }) => {
   const center = getLineCenter(start, end);
   const isHorizontal = start.y === end.y;
 
-  const isDraggingEdge = edge.start.id === SmartEdge.draggingEdge?.start.id;
-
-  const dragId = isDraggingEdge ? SmartEdge.draggingEdge.dragId : undefined;
-  const { dragRef } = useDraggable({
-    id: dragId,
-    onDragging(dragId, position, delta) {
+  const { dragRef } = useEdgeDraggable({
+    edge,
+    onDragging(dragId, dragFrom, position, delta) {
       const oldFlowPosition = kReactflow.instance!.screenToFlowPosition({
         x: position.x - delta.x,
         y: position.y - delta.y,
@@ -74,6 +72,7 @@ export const EdgeController = ({ edge }: { edge: SmartEdge }) => {
       }
       onDragging({
         dragId,
+        dragFrom,
         from: { start, end },
         to: { start: newStart, end: newEnd },
       });

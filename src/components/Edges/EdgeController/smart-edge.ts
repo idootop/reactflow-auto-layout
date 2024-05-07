@@ -40,9 +40,13 @@ export const getEdgeContext = (props: EdgeControllersParams): EdgeContext => {
 };
 
 export class SmartEdge {
-  static draggingEdge: {
+  static draggingEdge?: {
     dragId: string;
-    isTemp?: boolean;
+    dragFrom?: string;
+    target?: {
+      start: ControlPoint;
+      end: ControlPoint;
+    };
     start: ControlPoint;
     end: ControlPoint;
   };
@@ -141,20 +145,24 @@ export class SmartEdge {
 
     let to = { ..._to };
     const isTempDraggingEdge =
-      SmartEdge.draggingEdge?.isTemp &&
-      SmartEdge.draggingEdge.dragId === dragId;
+      SmartEdge.draggingEdge?.dragId === dragId &&
+      SmartEdge.draggingEdge?.target;
     if (isTempDraggingEdge) {
       // 在缓存点的基础上修正偏移量
       to = {
         start: {
           id: uuid(),
-          x: SmartEdge.draggingEdge.start.x + (to.start.x - from.start.x),
-          y: SmartEdge.draggingEdge.start.y + (to.start.y - from.start.y),
+          x:
+            SmartEdge.draggingEdge!.target!.start.x +
+            (to.start.x - from.start.x),
+          y:
+            SmartEdge.draggingEdge!.target!.start.y +
+            (to.start.y - from.start.y),
         },
         end: {
           id: uuid(),
-          x: SmartEdge.draggingEdge.end.x + (to.end.x - from.end.x),
-          y: SmartEdge.draggingEdge.end.y + (to.end.y - from.end.y),
+          x: SmartEdge.draggingEdge!.target!.end.x + (to.end.x - from.end.x),
+          y: SmartEdge.draggingEdge!.target!.end.y + (to.end.y - from.end.y),
         },
       };
     }
@@ -206,18 +214,20 @@ export class SmartEdge {
     if (this.isHorizontalLine) {
       const direction = from.start.x < from.end.x ? 1 : -1;
       const offset = _offset * direction;
-      SmartEdge.draggingEdge = isTempDraggingEdge
-        ? { dragId, start: to.start, end: to.end }
-        : {
-            dragId,
-            start: { id: uuid(), x: from.start.x + offset, y: to.start.y },
-            end: { id: uuid(), x: from.end.x - offset, y: to.start.y },
-          };
       if (!startSplit) {
-        SmartEdge.draggingEdge.isTemp = true;
+        SmartEdge.draggingEdge = {
+          dragId,
+          start: from.start,
+          end: from.end,
+          target: { start: to.start, end: to.end },
+        };
         return this.ctx.points;
       }
-      SmartEdge.draggingEdge.isTemp = false;
+      SmartEdge.draggingEdge = {
+        dragId,
+        start: { id: uuid(), x: from.start.x + offset, y: to.start.y },
+        end: { id: uuid(), x: from.end.x - offset, y: to.start.y },
+      };
       return [
         ...startPoints,
         { id: uuid(), x: from.start.x + offset, y: from.start.y },
@@ -229,18 +239,20 @@ export class SmartEdge {
     } else {
       const direction = from.start.y < from.end.y ? 1 : -1;
       const offset = _offset * direction;
-      SmartEdge.draggingEdge = isTempDraggingEdge
-        ? { dragId, start: to.start, end: to.end }
-        : {
-            dragId,
-            start: { id: uuid(), x: to.start.x, y: from.start.y + offset },
-            end: { id: uuid(), x: to.start.x, y: from.end.y - offset },
-          };
       if (!startSplit) {
-        SmartEdge.draggingEdge.isTemp = true;
+        SmartEdge.draggingEdge = {
+          dragId,
+          start: from.start,
+          end: from.end,
+          target: { start: to.start, end: to.end },
+        };
         return this.ctx.points;
       }
-      SmartEdge.draggingEdge.isTemp = false;
+      SmartEdge.draggingEdge = {
+        dragId,
+        start: { id: uuid(), x: to.start.x, y: from.start.y + offset },
+        end: { id: uuid(), x: to.start.x, y: from.end.y - offset },
+      };
       return [
         ...startPoints,
         { id: uuid(), x: from.start.x, y: from.start.y + offset },
@@ -295,8 +307,8 @@ export class SmartEdge {
           };
           return [
             ...startPoints,
-            this.previous!.start,
-            this.next!.end,
+            SmartEdge.draggingEdge.start,
+            SmartEdge.draggingEdge.end,
             ...endPoints,
           ];
         } else if (preY === targetY) {
@@ -391,8 +403,8 @@ export class SmartEdge {
           };
           return [
             ...startPoints,
-            this.previous!.start,
-            this.next!.end,
+            SmartEdge.draggingEdge.start,
+            SmartEdge.draggingEdge.end,
             ...endPoints,
           ];
         } else if (preX === targetX) {
@@ -524,9 +536,14 @@ export class SmartEdge {
     to,
   }: {
     dragId: string;
+    dragFrom: string;
     from: ILine;
     to: ILine;
   }) => {
+    if (distance(from.start, to.start) < 0.00001) {
+      // 拖动距离较近，仅刷新
+      return this.rebuildEdge(this.ctx.points);
+    }
     // 两端存在固定端点，自动拆分边
     if (this.isStartFixed || this.isEndFixed) {
       const splittedPoints = this.splitPoints(dragId, from, to);
