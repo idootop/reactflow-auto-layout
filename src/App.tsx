@@ -13,7 +13,7 @@ import ReactFlow, {
 
 import { jsonDecode } from "@/utils/base";
 
-import { ControlPanel, workflowInputHint } from "./components/ControlPanel";
+import { ControlPanel } from "./components/ControlPanel";
 import { kEdgeTypes } from "./components/Edges";
 import { ColorfulMarkerDefinitions } from "./components/Edges/Marker";
 import { kNodeTypes } from "./components/Nodes";
@@ -38,11 +38,9 @@ const EditWorkFlow = () => {
       return;
     }
     const input = props.workflow;
-    const data = ["", workflowInputHint].includes(input)
-      ? defaultWorkflow
-      : jsonDecode(input);
+    const data = jsonDecode(input);
     if (!data) {
-      alert("无效的 JSON，请检查格式是否正确");
+      alert("Invalid workflow JSON data");
       return;
     }
     const workflow = workflow2reactflow(data);

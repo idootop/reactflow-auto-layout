@@ -1,13 +1,14 @@
 import { button, Leva, useControls } from "leva";
-
+import defaultWorkflow from "../data/data.json";
 import { kDefaultLayoutConfig, ReactflowLayoutConfig } from "../layout/node";
+import { jsonEncode } from "@/utils/base";
 
 export const kReactflowLayoutConfig: {
   setState: any;
   state: ReactflowLayoutConfig;
 } = {} as any;
 
-export const workflowInputHint = "The JSON data of nodes and edges to layout";
+export const workflowInputHint = jsonEncode(defaultWorkflow)!;
 
 const algorithms = [
   "elk-mr-tree",
@@ -68,18 +69,6 @@ export const ControlPanel = (props: { layoutReactflow: any }) => {
         label: "Workflow",
         rows: 3,
         value: workflowInputHint,
-        onChange: (s) => {
-          const v = s.trim();
-          if (v === workflowInputHint) {
-            return;
-          }
-          const { state, setState } = kReactflowLayoutConfig;
-          const workflow = v.replace(workflowInputHint, "");
-          setState({
-            ...state,
-            workflow: workflow === "" ? workflowInputHint : workflow,
-          });
-        },
       },
       algorithm: {
         order: 2,
