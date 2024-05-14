@@ -1,10 +1,10 @@
-# ReactFlow Auto Layout and Edge Editing Demo
+# ReactFlow Auto Layout and Figma-like Edge Editing Demo
 
-A demo showcasing the auto layout and edge editing capabilities of ReactFlow.
+A demo showcasing the auto layout and Figma-like edge editing capabilities of ReactFlow.
 
 👉 View Demo: [https://reactflow-auto-layout.vercel.app](https://reactflow-auto-layout.vercel.app/)
 
-## ✨ Highlights
+# ✨ Highlights
 
 ### 1. Node Auto Layout
 
@@ -30,7 +30,31 @@ https://github.com/idootop/reactflow-auto-layout/assets/35302658/ea9a3657-b1d2-4
 
 https://github.com/idootop/reactflow-auto-layout/assets/35302658/01f1c5c5-f224-4d12-9a31-bca45a0d5a56
 
-## ❤️ Acknowledgement
+# 🌲 Introduction
+
+This demo is divided into several modules based on functionality, most of which can be directly copied and used. Let's break it down:
+
+### Basic Types:
+
+- [src/data/types.ts](./src/data/types.ts): Contains type definitions for node and edge data. Reviewing this will help you understand the rest of the code.
+
+### Node Auto Layout:
+
+- [src/layout/node/algorithms](./src/layout/node/algorithms): Contains implementations of various node layout algorithms.
+- [src/layout/useAutoLayout.ts](./src/layout/useAutoLayout.ts): Handles the auto layout process, including logic for dynamically adapting to node sizes.
+
+### Edge Editing Functionality:
+
+- [src/layout/edge/index.ts](./src/layout/edge/index.ts): Start here to explore the control point generation algorithms and logic for drawing rounded corner edge paths.
+- [src/layout/edge/algorithms/index.ts](./src/layout/edge/algorithms/index.ts): Core of the edge auto-routing algorithm. Refer to the [LogicFlow 边的绘制与交互](https://juejin.cn/post/6942727734518874142) article for more details.
+- [src/components/Edges/EdgeController/index.tsx](./src/components/Edges/EdgeController/index.tsx): Follow this to understand how edge segment drag events are handled.
+- [src/components/Edges/EdgeController/smart-edge.ts](./src/components/Edges/EdgeController/smart-edge.ts): Manages logic for edge auto-merging/splitting, similar to Figma.
+
+These are the key modules of the project. While it might seem complex at first, the overall logic is straightforward. If you have any questions, feel free to raise an [issue](https://github.com/idootop/reactflow-auto-layout/issues).
+
+> PS: The code comments are mostly in Chinese, which might be challenging :)
+
+# ❤️ Acknowledgement
 
 1. The [D3-hierarchy](https://github.com/d3/d3-hierarchy) auto layout approach mainly refers to: [flanksource-ui](https://github.com/flanksource/flanksource-ui/blob/75b35591d3bbc7d446fa326d0ca7536790f38d88/src/ui/Graphs/Layouts/algorithms/d3-hierarchy.ts)
 2. The Edge auto-routing approach mainly refers to: [LogicFlow 边的绘制与交互](https://juejin.cn/post/6942727734518874142)
