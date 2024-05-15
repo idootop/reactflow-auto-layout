@@ -115,10 +115,13 @@ export class SmartEdge {
 
   /**
    * 是否可以拖动
+   *
+   * Whether to drag
    */
   get canDrag() {
     if (this.isStartFixed || this.isEndFixed) {
       // 两端连接线要在可拆分边之后，才可以拖动
+      // The connection lines on both ends should not be dragged after the disassembly can be dragged
       return this.canSplit;
     }
     return this.distance >= this.minHandlerWidth;
@@ -126,6 +129,8 @@ export class SmartEdge {
 
   /**
    * 是否可以拆分边
+   *
+   * Can it be split
    */
   get canSplit() {
     return this.distance >= this.minHandlerWidth + 2 * this.ctx.offset;
@@ -133,6 +138,8 @@ export class SmartEdge {
 
   /**
    * 两端存在固定端点时，自动拆分边
+   *
+   * When there is a fixed end point at both ends, automatically split edges
    */
   splitPoints(
     dragId: string,
@@ -149,6 +156,7 @@ export class SmartEdge {
       SmartEdge.draggingEdge?.target;
     if (isTempDraggingEdge) {
       // 在缓存点的基础上修正偏移量
+      // Correct the offset on the basis of the cache point
       to = {
         start: {
           id: uuid(),
@@ -168,8 +176,10 @@ export class SmartEdge {
     }
 
     // 是否需要拆分
+    // Do you need to split
     let needSplit = false;
     // 是否开始拆分
+    // Whether to start splitting
     let startSplit = false;
 
     const sourceDelta = this.isHorizontalLine
@@ -266,6 +276,8 @@ export class SmartEdge {
 
   /**
    * 合并相近的边
+   *
+   * Similar edges
    */
   mergePoints(
     dragId: string,
@@ -285,6 +297,7 @@ export class SmartEdge {
       const preY = this.previous?.start.y;
       const nextY = this.next?.start.y;
       // 找到与目标坐标最近的边
+      // Find the edge closest to the target coordinates
       const targetY = preY
         ? nextY
           ? Math.abs(toY - preY) < Math.abs(toY - nextY)
@@ -293,13 +306,16 @@ export class SmartEdge {
           : preY
         : nextY!;
       // 确定是否需要合并（1. 靠近吸附对象 2. 靠的足够近）
+      // Determine whether you need to be merged (1. Near adsorption objects 2. Depending enough)
       const currentDistance = Math.abs(toY - targetY);
       const needMerge =
         Math.abs(fromY - targetY) > currentDistance && currentDistance < minGap;
       if (needMerge) {
         // 合并到新端点
+        // Merge to new endpoint
         if (preY === nextY && preY === targetY) {
           // previous, current, next 合并成一条直线
+          // Previous, Current, Next merged into a straight line
           SmartEdge.draggingEdge = {
             dragId,
             start: this.previous!.start,
@@ -314,10 +330,11 @@ export class SmartEdge {
         } else if (preY === targetY) {
           if (this.next) {
             // previous, current 合并成一条直线
+            // Previous, Current merged into a straight line
             SmartEdge.draggingEdge = {
               dragId,
               start: this.previous!.start,
-              end: { id: uuid(), x: from.end.x, y: preY }, // 新端点（投影）
+              end: { id: uuid(), x: from.end.x, y: preY }, // 新端点（投影） // New endpoint (projection)
             };
             return [
               ...startPoints,
@@ -329,10 +346,11 @@ export class SmartEdge {
             ];
           } else {
             // next 为空
+            // Next is empty
             SmartEdge.draggingEdge = {
               dragId,
               start: this.previous!.start,
-              end: { id: uuid(), x: from.end.x, y: preY }, // 新端点（投影）
+              end: { id: uuid(), x: from.end.x, y: preY }, // 新端点（投影） // New endpoint (projection)
             };
             return [
               ...startPoints,
@@ -345,9 +363,10 @@ export class SmartEdge {
         } else {
           if (this.previous) {
             // current, next 合并成一条直线
+            // Current, next merged into a straight line
             SmartEdge.draggingEdge = {
               dragId,
-              start: { id: uuid(), x: from.start.x, y: nextY! }, // 新端点（投影）
+              start: { id: uuid(), x: from.start.x, y: nextY! }, // 新端点（投影） // New endpoint (projection)
               end: this.next!.end,
             };
             return [
@@ -360,9 +379,10 @@ export class SmartEdge {
             ];
           } else {
             // previous 为空
+            // Previous is empty
             SmartEdge.draggingEdge = {
               dragId,
-              start: { id: uuid(), x: from.start.x, y: nextY! }, // 新端点（投影）
+              start: { id: uuid(), x: from.start.x, y: nextY! }, // 新端点（投影） // New endpoint (projection)
               end: this.next!.end,
             };
             return [
@@ -381,6 +401,7 @@ export class SmartEdge {
       const preX = this.previous?.start.x;
       const nextX = this.next?.start.x;
       // 找到与目标坐标最近的边
+      // Find the edge closest to the target coordinates
       const targetX = preX
         ? nextX
           ? Math.abs(toX - preX) < Math.abs(toX - nextX)
@@ -389,13 +410,16 @@ export class SmartEdge {
           : preX
         : nextX!;
       // 确定是否需要合并（1. 靠近吸附对象 2. 靠的足够近）
+      // Determine whether you need to be merged (1. Near adsorption objects 2. Depending enough)
       const currentDistance = Math.abs(toX - targetX);
       const needMerge =
         Math.abs(fromX - targetX) > currentDistance && currentDistance < minGap;
       if (needMerge) {
         // 合并到新端点
+        // Merge to new endpoint
         if (preX === nextX && preX === targetX) {
           // previous, current, next 合并成一条直线
+          // Previous, Current, Next merged into a straight line
           SmartEdge.draggingEdge = {
             dragId,
             start: this.previous!.start,
@@ -410,10 +434,11 @@ export class SmartEdge {
         } else if (preX === targetX) {
           if (this.next) {
             // previous, current 合并成一条直线
+            // Previous, Current merged into a straight line
             SmartEdge.draggingEdge = {
               dragId,
               start: this.previous!.start,
-              end: { id: uuid(), x: preX, y: from.end.y }, // 新端点（投影）
+              end: { id: uuid(), x: preX, y: from.end.y }, // 新端点（投影） // New endpoint (projection)
             };
             return [
               ...startPoints,
@@ -425,10 +450,11 @@ export class SmartEdge {
             ];
           } else {
             // next 为空
+            // Next is empty
             SmartEdge.draggingEdge = {
               dragId,
               start: this.previous!.start,
-              end: { id: uuid(), x: preX, y: from.end.y }, // 新端点（投影）
+              end: { id: uuid(), x: preX, y: from.end.y }, // 新端点（投影） // New endpoint (projection)
             };
             return [
               ...startPoints,
@@ -441,9 +467,10 @@ export class SmartEdge {
         } else {
           if (this.previous) {
             // current, next 合并成一条直线
+            // Current, next merged into a straight line
             SmartEdge.draggingEdge = {
               dragId,
-              start: { id: uuid(), x: nextX!, y: from.start.y }, // 新端点（投影）
+              start: { id: uuid(), x: nextX!, y: from.start.y }, // 新端点（投影） // New endpoint (projection)
               end: this.next!.end,
             };
             return [
@@ -456,9 +483,10 @@ export class SmartEdge {
             ];
           } else {
             // previous 为空
+            // Previous is empty
             SmartEdge.draggingEdge = {
               dragId,
-              start: { id: uuid(), x: nextX!, y: from.start.y }, // 新端点（投影）
+              start: { id: uuid(), x: nextX!, y: from.start.y }, // 新端点（投影） // New endpoint (projection)
               end: this.next!.end,
             };
             return [
@@ -479,10 +507,16 @@ export class SmartEdge {
    *
    * 1. 有重叠的路径无效
    * 2. 不包含 offset 无效
+   *
+   * Check whether the path is effective
+   *
+   * 1. There is an overlapping path invalid
+   * 2. No offset invalid
    */
   isValidPoints = (points: ControlPoint[]): boolean => {
     if (points.length < 4) {
       // 3 条边以下的路径总是有效的
+      // 3 The path below the edge is always effective
       return true;
     }
     const edges: ILine[] = [
@@ -492,6 +526,7 @@ export class SmartEdge {
       { start: points[points.length - 2], end: points[points.length - 1] },
     ];
     // 不包含 offset 无效
+    // No offset invalid
     if (
       !isLineContainsPoint(
         edges[0].start,
@@ -503,6 +538,7 @@ export class SmartEdge {
       return false;
     }
     // 有重叠的路径无效
+    // There is an overlapping path invalid
     if (
       areLinesReverseDirection(
         edges[0].start,
@@ -542,9 +578,11 @@ export class SmartEdge {
   }) => {
     if (distance(from.start, to.start) < 0.00001) {
       // 拖动距离较近，仅刷新
+      // The drag distance is closer, only refresh
       return this.rebuildEdge(this.ctx.points);
     }
     // 两端存在固定端点，自动拆分边
+    // There are fixed endpoints at both ends, automatic split
     if (this.isStartFixed || this.isEndFixed) {
       const splittedPoints = this.splitPoints(dragId, from, to);
       if (splittedPoints) {
@@ -552,11 +590,13 @@ export class SmartEdge {
       }
     }
     // 合并相近边
+    // Consolidate
     const mergedPoints = this.mergePoints(dragId, from, to);
     if (mergedPoints && this.isValidPoints(mergedPoints)) {
       return this.rebuildEdge(mergedPoints);
     }
     // 更新 current 边坐标
+    // Update Current edge coordinates
     const { x: targetX, y: targetY } = to.start;
     if (this.isHorizontalLine) {
       this.start.y = targetY;
@@ -567,6 +607,7 @@ export class SmartEdge {
     }
     SmartEdge.draggingEdge = { dragId, start: this.start, end: this.end };
     // 刷新
+    // refresh
     this.rebuildEdge(this.ctx.points);
   };
 }

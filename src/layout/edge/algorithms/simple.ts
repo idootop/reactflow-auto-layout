@@ -11,7 +11,11 @@ interface GetSimplePathParams {
   targetOffset: ControlPoint;
 }
 
-/* 判断线段的方向 */
+/**
+ * 判断线段的方向
+ *
+ * Determine the direction of the line segment
+ */
 const getLineDirection = (
   start: ControlPoint,
   end: ControlPoint
@@ -19,6 +23,8 @@ const getLineDirection = (
 
 /**
  * 当两个节点靠的过近时，使用简单 path
+ *
+ * When two nodes are too close, use a simple path
  */
 export const getSimplePath = ({
   isDirectLink,
@@ -33,6 +39,7 @@ export const getSimplePath = ({
   const isHorizontalLayout = sourceDirection === "horizontal";
   if (isDirectLink) {
     // 直接连接，返回简单 Path
+    // Direct connection, return a simple Path
     if (isHorizontalLayout) {
       if (sourceOffset.x <= targetOffset.x) {
         const centerX = (sourceOffset.x + targetOffset.x) / 2;
@@ -69,6 +76,7 @@ export const getSimplePath = ({
   }
   if (sourceDirection === targetDirection) {
     // 方向相同，添加两个点，两条平行线垂直距离一半的两个端点
+    // Same direction, add two points, two endpoints of parallel lines at half the vertical distance
     if (source.y === sourceOffset.y) {
       points.push({
         id: uuid(),
@@ -94,6 +102,7 @@ export const getSimplePath = ({
     }
   } else {
     // 方向不同，添加一个点，保证不在当前线段上(会出现重合)，且不能有折线
+    // Different directions, add one point, ensure it's not on the current line segment (to avoid overlap), and there are no turns
     let point = { id: uuid(), x: sourceOffset.x, y: targetOffset.y };
     const inStart = isInLine(point, source, sourceOffset);
     const inEnd = isInLine(point, target, targetOffset);
