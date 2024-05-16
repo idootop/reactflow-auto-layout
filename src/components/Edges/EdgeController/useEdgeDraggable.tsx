@@ -54,13 +54,11 @@ export const useEdgeDraggable = (props: UseDraggableParams) => {
       return;
     }
     if (event.button !== 0) {
-      // 过滤右键事件
-      // Filter right -click event
+      // Not a left mouse button click event
       return;
     }
     if (event.target !== dragRef.current) {
-      // 点击当前元素
-      // Click the current element
+      // Not clicked on the current element
       return;
     }
     SmartEdge.draggingEdge = {
@@ -88,8 +86,7 @@ export const useEdgeDraggable = (props: UseDraggableParams) => {
       return;
     }
     if (event.buttons !== 1) {
-      // 非左键拖拽，结束拖拽
-      // Non -left button drag, end drag and drag
+      // Ending drag because it's not a left mouse button drag event
       return onDragEnd();
     }
     propsRef.current.onDragging?.(
