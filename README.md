@@ -1,6 +1,6 @@
-# ReactFlow Auto Layout and Figma-like Edge Editing Demo
+# ReactFlow Auto Layout Demo
 
-A demo showcasing the auto layout and Figma-like edge editing capabilities of ReactFlow.
+A demo showcasing the auto layout and Figma-like edge editing capabilities of [ReactFlow](https://reactflow.dev).
 
 👉 View Demo: [https://reactflow-auto-layout.vercel.app](https://reactflow-auto-layout.vercel.app/)
 
@@ -54,5 +54,7 @@ These are the key modules of the project. While it might seem complex at first, 
 
 # ❤️ Acknowledgement
 
-1. The [D3-hierarchy](https://github.com/d3/d3-hierarchy) auto layout approach mainly refers to: [flanksource-ui](https://github.com/flanksource/flanksource-ui/blob/75b35591d3bbc7d446fa326d0ca7536790f38d88/src/ui/Graphs/Layouts/algorithms/d3-hierarchy.ts)
-2. The Edge auto-routing approach mainly refers to: [LogicFlow 边的绘制与交互](https://juejin.cn/post/6942727734518874142)
+1. [ReactFlow](https://reactflow.dev/): The core diagrams engine empowering this project.
+2. The [D3-hierarchy](https://github.com/d3/d3-hierarchy) auto layout approach primarily referenced from: [flanksource-ui](https://github.com/flanksource/flanksource-ui/blob/75b35591d3bbc7d446fa326d0ca7536790f38d88/src/ui/Graphs/Layouts/algorithms/d3-hierarchy.ts)
+3. The Edge auto-routing approach mainly referred to: [LogicFlow 边的绘制与交互](https://juejin.cn/post/6942727734518874142)
+4. Special thanks to [a3ng7n ](https://github.com/a3ng7n) for the invaluable [English comment translations](https://github.com/idootop/reactflow-auto-layout/pull/1).
