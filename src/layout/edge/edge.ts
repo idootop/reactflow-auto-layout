@@ -33,17 +33,13 @@ export const isConnectionBackward = (props: {
 };
 
 /**
- * 获取两点之间的直线距离
- * 
- * Get the straight line distance between two points
+ * Get the distance between two points
  */
 export const distance = (p1: ControlPoint, p2: ControlPoint) => {
   return Math.hypot(p2.x - p1.x, p2.y - p1.y);
 };
 
 /**
- * 获取线段中点
- * 
  * Get the midpoint of the line segment
  */
 export const getLineCenter = (
@@ -58,9 +54,7 @@ export const getLineCenter = (
 };
 
 /**
- * 线段是否包含点
- * 
- * Whether the line segment contains points
+ * Whether the line segment contains point
  */
 export const isLineContainsPoint = (
   start: ControlPoint,
@@ -80,20 +74,16 @@ export const isLineContainsPoint = (
 };
 
 /**
- * 根据输入曲线的控制点，输出曲线 SVG path
+ * Generates an SVG path for an edge based on the control points.
  *
- * 注意：两个控制点之间是直线，除了端点之外的控制点处都为带圆角的转折点。
+ * The line between two control points is straight, and each control point represents a turning point with rounded corners.
  *
- * According to the control point of the input curve, the output curve SVG PATH
+ * @param points An array of points representing the endpoints and control points of the edge.
  *
- * Note: The two control points are straight lines, and the control points except the endpoint are the turning point with a rounded corner.
- * @param points 曲线两端点 + 控制点 {x,y}，从输入端点开始，到输出端点结束。至少需要 2 个点
+ * - At least 2 points are required.
+ * - The points should be ordered starting from the input endpoint and ending at the output endpoint.
  *
- * curve both ends + control points {x, y}, start from the input endpoint, to the end of the output endpoint.It takes at least 2 points
- *
- * @param radius 曲线每个转折点处的拐角半径（非曲线borderRadius）。
- *
- * curve at the corner radius at each turning point (non-curve Borderradius).
+ * @param radius The radius of the rounded corners at each turning point.
  *
  */
 export function getPathWithRoundCorners(
@@ -101,7 +91,7 @@ export function getPathWithRoundCorners(
   radius: number
 ): string {
   if (points.length < 2) {
-    throw new Error("至少需要两个点");
+    throw new Error("At least 2 points are required.");
   }
 
   function getRoundCorner(
@@ -113,7 +103,6 @@ export function getPathWithRoundCorners(
     const { x, y } = center;
 
     if (!areLinesPerpendicular(p1, center, center, p2)) {
-      // 两条线段不垂直，直接返回直线
       // The two line segments are not vertical, and return directly to the straight line
       return `L ${x} ${y}`;
     }
@@ -138,11 +127,9 @@ export function getPathWithRoundCorners(
   const path: string[] = [];
   for (let i = 0; i < points.length; i++) {
     if (i === 0) {
-      // 起点
-      // starting point
+      // Starting
       path.push(`M ${points[i].x} ${points[i].y}`);
     } else if (i === points.length - 1) {
-      // 终点
       // Ending
       path.push(`L ${points[i].x} ${points[i].y}`);
     } else {
@@ -156,8 +143,6 @@ export function getPathWithRoundCorners(
 }
 
 /**
- * 获取折线上距离最长的线段
- *
  * Get the longest line segment on the folding line
  */
 export function getLongestLine(
@@ -176,21 +161,16 @@ export function getLongestLine(
 }
 
 /**
- * 获取折线上的 Label 位置
+ * Calculate the position of a label on the polyline.
  *
- * 先找居中路径，非偶数时，再找最长路径
- *
- * Get the Label location on the folding line
- *
- * Find the middle path first, when the non -occasion, then find the longest path
+ * It first finds the midpoint, and if the number of points is odd, it then finds the longest path.
  */
 export function getLabelPosition(
   points: ControlPoint[],
   minGap = 20
 ): XYPosition {
   if (points.length % 2 === 0) {
-    // 找到中间的线段
-    // Find the middle line segment
+    // Find the midpoint of the polyline
     const middleP1 = points[points.length / 2 - 1];
     const middleP2 = points[points.length / 2];
     if (distance(middleP1, middleP2) > minGap) {
@@ -205,9 +185,7 @@ export function getLabelPosition(
 }
 
 /**
- * 判断两条线段是否垂直(水平，竖直方向)
- *
- * Determine whether the two line segments are vertical (horizontal, vertical direction)
+ * Determines whether two line segments are perpendicular (assuming line segments are either horizontal or vertical).
  */
 export function areLinesPerpendicular(
   p1: ControlPoint,
@@ -219,9 +197,7 @@ export function areLinesPerpendicular(
 }
 
 /**
- * 判断两条线段是否平行(水平，竖直方向)
- *
- * Determine whether the two line segments are parallel (horizontal, vertical direction)
+ * Determines whether two line segments are parallel (assuming line segments are either horizontal or vertical).
  */
 export function areLinesParallel(
   p1: ControlPoint,
@@ -233,9 +209,7 @@ export function areLinesParallel(
 }
 
 /**
- * 判断两条直线是否同向(水平，竖直方向)
- *
- * Determine whether the two straight lines are the same direction (horizontal, vertical direction)
+ * Determines whether two lines are in the same direction (assuming line segments are either horizontal or vertical).
  */
 export function areLinesSameDirection(
   p1: ControlPoint,
@@ -250,9 +224,7 @@ export function areLinesSameDirection(
 }
 
 /**
- * 判断两条直线是否反向(水平，竖直方向)
- *
- * Determine whether the two straight lines are reverse (horizontal, vertical direction)
+ * Determines whether two lines are in reverse direction (assuming line segments are either horizontal or vertical).
  */
 export function areLinesReverseDirection(
   p1: ControlPoint,
@@ -266,11 +238,6 @@ export function areLinesReverseDirection(
   );
 }
 
-/**
- * 两线段夹角
- *
- * Two -line angle
- */
 export function getAngleBetweenLines(
   p1: ControlPoint,
   p2: ControlPoint,

@@ -31,8 +31,7 @@ export const layoutELK = async (
   const layoutNodes = nodes.map((node) => {
     const incomers = getIncomers(node, nodes, edges);
     if (incomers.length < 1) {
-      // 没有输入的 Node 即为 subWorkflow 的根节点
-      // Node without input is the root node of subworkflow
+      // Node without input is the root node of sub-workflow
       subWorkflowRootNodes.push(node);
     }
     const { widthWithDefault, heightWithDefault } = getNodeSize(node);
@@ -67,8 +66,7 @@ export const layoutELK = async (
     };
   });
 
-  // 将 subWorkflow 连接到根节点
-  // Connect subworkflow to the root node
+  // Connect sub-workflows' root nodes to the rootNode
   const rootNode: any = { id: "#root", width: 1, height: 1 };
   layoutNodes.push(rootNode);
   for (const subWorkflowRootNode of subWorkflowRootNodes) {

@@ -10,7 +10,8 @@ export const layoutWithFlush = async (options: ILayoutReactflow) => {
   const layout = await layoutReactflow(options);
   kReactflow.instance?.setNodes(layout.nodes);
   kReactflow.instance?.setEdges(layout.edges);
-  await nextTick(10); // 等待 render 完毕 // Wait for render to complete
+  // Wait for render to complete
+  await nextTick(10);
   const { nodes, edges } = getReactflowData();
   return { layout, nodes, edges };
 };
@@ -25,14 +26,12 @@ export const useAutoLayout = () => {
     const isHorizontal = options.direction === "horizontal";
 
     setLayouting(true);
-    // 第一次布局（获取元素尺寸）
-    // The first layout (acquisition element size)
+    // Perform the first layout to acquire node sizes
     const firstLayout = await layoutWithFlush({
       ...options,
-      visibility: "hidden",
+      visibility: "hidden", // Hide layout during the first layout pass
     });
-    // 第二次布局（使用元素实际尺寸）
-    // The second layout (the actual size of the element)
+    // Perform the second layout using actual node sizes
     const secondLayout = await layoutWithFlush({
       visibility: "visible",
       ...options,
@@ -41,10 +40,8 @@ export const useAutoLayout = () => {
     });
     setLayouting(false);
 
-    // 居中到 root 节点的位置
-    // Centered to the position of the root node
+    // Center the viewpoint to the position of the root node
     const root = getRootNode(secondLayout.layout.nodes);
-    // 来一点偏移，使其视觉上居中
     // Give it a little offset so it's visually centered
     const offset = isHorizontal
       ? {

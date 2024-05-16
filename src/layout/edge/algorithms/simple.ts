@@ -4,30 +4,25 @@ import { LayoutDirection } from "../../node";
 import { ControlPoint, isInLine, isOnLine } from "../point";
 
 interface GetSimplePathParams {
-  isDirectLink?: boolean;
+  isDirectConnect?: boolean;
   source: ControlPoint;
   target: ControlPoint;
   sourceOffset: ControlPoint;
   targetOffset: ControlPoint;
 }
 
-/**
- * 判断线段的方向
- *
- * Determine the direction of the line segment
- */
 const getLineDirection = (
   start: ControlPoint,
   end: ControlPoint
 ): LayoutDirection => (start.x === end.x ? "vertical" : "horizontal");
 
 /**
- * 当两个节点靠的过近时，使用简单 path
- *
- * When two nodes are too close, use a simple path
+ * When two nodes are too close, use the simple path
+ * 
+ * @returns Control points including sourceOffset and targetOffset (not including source and target points).
  */
 export const getSimplePath = ({
-  isDirectLink,
+  isDirectConnect,
   source,
   target,
   sourceOffset,
@@ -37,8 +32,7 @@ export const getSimplePath = ({
   const sourceDirection = getLineDirection(source, sourceOffset);
   const targetDirection = getLineDirection(target, targetOffset);
   const isHorizontalLayout = sourceDirection === "horizontal";
-  if (isDirectLink) {
-    // 直接连接，返回简单 Path
+  if (isDirectConnect) {
     // Direct connection, return a simple Path
     if (isHorizontalLayout) {
       if (sourceOffset.x <= targetOffset.x) {
@@ -75,7 +69,6 @@ export const getSimplePath = ({
     }
   }
   if (sourceDirection === targetDirection) {
-    // 方向相同，添加两个点，两条平行线垂直距离一半的两个端点
     // Same direction, add two points, two endpoints of parallel lines at half the vertical distance
     if (source.y === sourceOffset.y) {
       points.push({
@@ -101,7 +94,6 @@ export const getSimplePath = ({
       });
     }
   } else {
-    // 方向不同，添加一个点，保证不在当前线段上(会出现重合)，且不能有折线
     // Different directions, add one point, ensure it's not on the current line segment (to avoid overlap), and there are no turns
     let point = { id: uuid(), x: sourceOffset.x, y: targetOffset.y };
     const inStart = isInLine(point, source, sourceOffset);

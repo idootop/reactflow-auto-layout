@@ -7,17 +7,24 @@ import {
 } from "../point";
 
 interface GetAStarPathParams {
+  /**
+   * Collection of potential control points between `sourceOffset` and `targetOffset`, excluding the `source` and `target` points.
+   */
   points: ControlPoint[];
-  // 以下的起止点信息用于优化折线策略
-  // The following start and end point information is used to optimize the polyline strategy
   source: ControlPoint;
   target: ControlPoint;
+  /**
+   * Node size information for the `source` and `target`, used to optimize edge routing without intersecting nodes.
+   */
   sourceRect: NodeRect;
   targetRect: NodeRect;
 }
 
 /**
- * A* search algorithm: https://zh.wikipedia.org/wiki/A*%E6%90%9C%E5%B0%8B%E6%BC%94%E7%AE%97%E6%B3%95
+ * Utilizes the [A\* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm) combined with
+ * [Manhattan Distance](https://simple.wikipedia.org/wiki/Manhattan_distance) to find the optimal path for edges.
+ * 
+ * @returns Control points including sourceOffset and targetOffset (not including source and target points).
  */
 export const getAStarPath = ({
   points,
@@ -133,14 +140,8 @@ interface GetNextNeighborPointsParams {
 }
 
 /**
- * 获取当前控制点可能的相邻点集合
- *
- * - 连线在水平或竖直方向上
- * - 连线不与两端 Node 相交
- * - 连线不与前面的线段反向（重叠）
- * 
  * Get the set of possible neighboring points for the current control point
- * 
+ *
  * - The line is in a horizontal or vertical direction
  * - The line does not intersect with the two end nodes
  * - The line does not overlap with the previous line segment in reverse direction
@@ -156,19 +157,17 @@ export const getNextNeighborPoints = ({
     if (p === current) {
       return false;
     }
-    // 连线在水平或竖直方向上
     // The connection is in the horizontal or vertical direction
     const rightDirection = p.x === current.x || p.y === current.y;
-    // 与前面的线段反向（重叠）
-    // Reverse with the previous line segment (overlap)
+    // Reverse direction with the previous line segment (overlap)
     const reverseDirection = previous
       ? areLinesReverseDirection(previous, current, current, p)
       : false;
     return (
-      rightDirection && // 连线在水平或竖直方向上 // The line is in a horizontal or vertical direction
-      !reverseDirection && // 不与前面的线段反向（重叠） // The line does not overlap with the previous line segment in reverse direction
-      !isSegmentCrossingRect(p, current, sourceRect) && // 不与 sourceNode 相交 // Does not intersect with sourceNode
-      !isSegmentCrossingRect(p, current, targetRect) // 不与 targetNode 相交 // Does not intersect with targetNode
+      rightDirection && // The line is in a horizontal or vertical direction
+      !reverseDirection && // The line does not overlap with the previous line segment in reverse direction
+      !isSegmentCrossingRect(p, current, sourceRect) && // Does not intersect with sourceNode
+      !isSegmentCrossingRect(p, current, targetRect) // Does not intersect with targetNode
     );
   });
 };
@@ -176,8 +175,6 @@ export const getNextNeighborPoints = ({
 interface HeuristicCostParams {
   from: ControlPoint;
   to: ControlPoint;
-  // 起止点
-  // Start and end points
   start: ControlPoint;
   end: ControlPoint;
   source: ControlPoint;
@@ -185,12 +182,6 @@ interface HeuristicCostParams {
 }
 
 /**
- * 连接点距离损失函数
- *
- * - 距离之和越小越好
- * - 起止线段与起止方向相同越好
- * - 拐点在线段中间对称/居中越好
- *
  * Connection point distance loss function
  *
  * - The smaller the sum of distances, the better
@@ -220,10 +211,6 @@ const heuristicCostEstimate = ({
 };
 
 /**
- * 计算两点之间的预估距离
- *
- * 曼哈顿距离：水平、竖直方向距离之和，计算速度更快
- *
  * Calculate the estimated distance between two points
  *
  * Manhattan distance: the sum of horizontal and vertical distances, faster calculation speed

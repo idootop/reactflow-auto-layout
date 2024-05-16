@@ -20,16 +20,10 @@ interface EdgeStyle {
 }
 
 /**
- * 获取链接线的样式
- *
- * 1. 当两端 Node 连接边超过 3 条时，使用多种颜色区分边
- * 2. 当连接线向后或 hub 到一个 Node 时，使用虚线区分边
- * 3. 当连接线 hub 到一个 Node 时，使用 bezier path
- * 
  * Get the style of the connection line
  * 
  * 1. When there are more than 3 edges connecting to both ends of the Node, use multiple colors to distinguish the edges.
- * 2. When the connection line goes backward or from a hub to a Node, use dashed lines to distinguish the edges.
+ * 2. When the connection line goes backward or connects to a hub Node, use dashed lines to distinguish the edges.
  * 3. When the connection line goes from a hub to a Node, use bezier path.
  */
 export const getEdgeStyles = (props: {
@@ -39,14 +33,12 @@ export const getEdgeStyles = (props: {
   const { id, isBackward } = props;
   const idx = parseInt(lastOf(id.split("#")) ?? "0", 10);
   if (isBackward) {
-    // 当连接线向后或 hub 到一个 Node 时，使用虚线区分边
-    // Use dashed lines to distinguish the edges when the connection line goes backward or from a hub to a Node
+    // Use dashed lines to distinguish the edges when the connection line goes backward or connects to a hub Node
     return { color: kNoMarkerColor, edgeType: "dashed", pathType: "base" };
   }
   const edge: ReactflowEdgeWithData = kReactflow.instance!.getEdge(id)!;
   if (edge.data!.targetPort.edges > 2) {
-    // 当连接线 hub 到一个 Node 时，使用虚线 bezier path
-    // Use dashed bezier path when the connection line goes from a hub to a Node
+    // Use dashed bezier path when the connection line connects to a hub Node
     return {
       color: kYesMarkerColor,
       edgeType: "dashed",
@@ -54,7 +46,6 @@ export const getEdgeStyles = (props: {
     };
   }
   if (edge.data!.sourcePort.edges > 2) {
-    // 当两端 Node 连接边超过 3 条时，使用多种颜色区分边
     // Use multiple colors to distinguish the edges when there are more than 3 edges connecting to both ends of the Node
     return {
       color: kBaseMarkerColors[idx % kBaseMarkerColors.length],

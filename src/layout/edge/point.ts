@@ -36,9 +36,7 @@ export interface GetVerticesParams {
 }
 
 /**
- * 找到可能的中点和交点
- *
- * Find the possible midpoint and intersection
+ * Find the potential midpoint and intersection
  */
 export const getCenterPoints = ({
   source,
@@ -47,8 +45,7 @@ export const getCenterPoints = ({
   targetOffset,
 }: GetVerticesParams): ControlPoint[] => {
   if (sourceOffset.x === targetOffset.x || sourceOffset.y === targetOffset.y) {
-    // 水平或竖直直线，无法确定矩形
-    // Horizontal or vertical straight lines cannot determine the rectangle
+    // Cannot determine the rectangle
     return [];
   }
   const vertices = [...getRectVertices(source), ...getRectVertices(target)];
@@ -101,9 +98,7 @@ export const isPointInRect = (p: ControlPoint, box: NodeRect) => {
 };
 
 /**
- * 找到一个 Rect 和外部的一个顶点的外接 Rect 的顶点
- *
- * Find a vertic point of an external RECT with a vertex on the outside
+ * Find the vertex of an enclosing rectangle with a vertex outside of it, given a rectangle and an external vertex.
  */
 export const getVerticesFromRectVertex = (
   box: NodeRect,
@@ -128,9 +123,7 @@ export const getSidesFromPoints = (points: ControlPoint[]) => {
 };
 
 /**
- * 获取 Rect 的 top, right, bottom, left
- *
- * Get the top, right, bottom, left
+ * Get the top, right, bottom, left of the Rect.
  */
 export const getRectSides = (box: NodeRect): RectSides => {
   const { x: left, y: top, width, height } = box;
@@ -153,21 +146,11 @@ export const getRectVerticesFromSides = ({
   ];
 };
 
-/**
- * 获取 Rect 的顶点
- *
- * Get the apex of the rect
- */
 export const getRectVertices = (box: NodeRect) => {
   const sides = getRectSides(box);
   return getRectVerticesFromSides(sides);
 };
 
-/**
- * 合并 Rects
- *
- * Merge RECTS
- */
 export const mergeRects = (...boxes: NodeRect[]): NodeRect => {
   const left = Math.min(
     ...boxes.reduce((pre, e) => [...pre, e.x, e.x + e.width], [] as number[])
@@ -219,9 +202,7 @@ export const getOffsetPoint = (
 };
 
 /**
- * 判断一个点是否在线段上
- *
- * Determine whether a point is on the online segment
+ * Determine whether a point is in the segment
  */
 export const isInLine = (
   p: ControlPoint,
@@ -237,8 +218,6 @@ export const isInLine = (
 };
 
 /**
- * 判断一个点是否在直线上
- *
  * Determine whether a point is on the straight line
  */
 export const isOnLine = (
@@ -258,21 +237,14 @@ export interface OptimizePointsParams {
 }
 
 /**
- * 优化控制点
+ * Optimize the control points of edges.
  *
- * - 合并相近坐标点
- * - 删除重复坐标点
- * - 纠正输入输出点
- *
- * Optimized control point
- *
- * - Merge points with similar coordinates
- * - Delete duplicate coordinate points
- * - Correct input and output points
+ * - Merge points with similar coordinates.
+ * - Delete duplicate coordinate points.
+ * - Correct source and target points.
  */
 export const optimizeInputPoints = (p: OptimizePointsParams) => {
-  // 合并相近坐标点
-  // Merge similar to coordinate points
+  // Merge points with similar coordinates
   let edgePoints = mergeClosePoints([
     p.source,
     p.sourceOffset,
@@ -284,6 +256,7 @@ export const optimizeInputPoints = (p: OptimizePointsParams) => {
   const target = edgePoints.pop()!;
   const sourceOffset = edgePoints[0];
   const targetOffset = edgePoints[edgePoints.length - 1];
+  // Correct source and target points.
   if (isHorizontalFromPosition(p.source.position)) {
     source.x = p.source.x;
   } else {
@@ -294,8 +267,7 @@ export const optimizeInputPoints = (p: OptimizePointsParams) => {
   } else {
     target.y = p.target.y;
   }
-  // 去除重复的坐标点
-  // Remove the repetitive coordinate point
+  // Remove duplicate coordinate points
   edgePoints = removeRepeatPoints(edgePoints).map((p, idx) => ({
     ...p,
     id: `${idx + 1}`,
@@ -304,13 +276,10 @@ export const optimizeInputPoints = (p: OptimizePointsParams) => {
 };
 
 /**
- * 优化折线控制点
+ * Reduce the control points of edges.
  *
- * - 确保一条直线上只有 2 个端点，删除直线内部的控制点
- *
- * Optimize the folding line control point
- *
- * - Secently have only two endpoints on a straight line, delete the control point inside the linear line
+ * - Ensure that there are only 2 endpoints on a straight line.
+ * - Remove control points inside the straight line.
  */
 export function reducePoints(points: ControlPoint[]): ControlPoint[] {
   const optimizedPoints = [points[0]];
@@ -325,15 +294,12 @@ export function reducePoints(points: ControlPoint[]): ControlPoint[] {
 }
 
 /**
- * 合并相近的坐标，同时坐标取整
- *
- * Combined coordinates, at the same time, the coordinates are collected
+ * Merge nearby coordinates while rounding the coordinates to integers.
  */
 export function mergeClosePoints(
   points: ControlPoint[],
   threshold = 4
 ): ControlPoint[] {
-  // 离散坐标
   // Discrete coordinates
   const positions = { x: [] as number[], y: [] as number[] };
   const findPosition = (axis: "x" | "y", v: number) => {
@@ -365,8 +331,6 @@ export function isEqualPoint(p1: ControlPoint, p2: ControlPoint) {
 }
 
 /**
- * 去除重复的点（保留起点和终点）
- *
  * Remove the duplicate point (retain the starting point and end point)
  */
 export function removeRepeatPoints(points: ControlPoint[]): ControlPoint[] {
@@ -387,8 +351,6 @@ export function removeRepeatPoints(points: ControlPoint[]): ControlPoint[] {
 }
 
 /**
- * 判断线段是否相交
- *
  * Determine whether the line segment intersects
  */
 const isSegmentsIntersected = (
@@ -415,8 +377,6 @@ const isSegmentsIntersected = (
 };
 
 /**
- * 判断线段是否与矩形相交
- *
  * Determine whether the line segment intersects the rectangle
  */
 export const isSegmentCrossingRect = (

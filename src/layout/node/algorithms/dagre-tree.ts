@@ -23,8 +23,7 @@ export const layoutDagreTree: LayoutAlgorithm = async (props) => {
   nodes.forEach((node) => {
     const incomers = getIncomers(node, nodes, edges);
     if (incomers.length < 1) {
-      // 没有输入的 Node 即为 subWorkflow 的根节点
-      // Node without input is the root node of subworkflow
+      // Node without input is the root node of sub-workflow
       subWorkflowRootNodes.push(node);
     }
     const { widthWithDefault, heightWithDefault } = getNodeSize(node);
@@ -36,8 +35,7 @@ export const layoutDagreTree: LayoutAlgorithm = async (props) => {
 
   edges.forEach((edge) => dagreGraph.setEdge(edge.source, edge.target));
 
-  // 将 subWorkflow 连接到根节点
-  // Connect subworkflow to the root node
+  // Connect sub-workflows' root nodes to the rootNode
   dagreGraph.setNode("#root", { width: 1, height: 1 });
   for (const subWorkflowRootNode of subWorkflowRootNodes) {
     dagreGraph.setEdge("#root", subWorkflowRootNode.id);
@@ -54,8 +52,8 @@ export const layoutDagreTree: LayoutAlgorithm = async (props) => {
         direction,
         visibility,
         fixPosition: ({ x, y, width, height }) => ({
-          // 此算法使用 Node 的中心坐标为基准点，需要调整到 ReactFlow 使用的 topLeft 坐标
-          // This algorithm uses the central coordinate point of Node as the benchmark point. You need to adjust to the topleft coordinate used by ReactFlow
+          // This algorithm uses the center coordinate of the node as the reference point,
+          // which needs adjustment for ReactFlow's topLeft coordinate system.
           x: x - width / 2,
           y: y - height / 2,
         }),

@@ -19,13 +19,14 @@ export interface GetControlPointsParams {
   target: HandlePosition;
   sourceRect: NodeRect;
   targetRect: NodeRect;
-  // 连接线和节点的最小间距
-  // Minimum spacing between connecting lines and nodes
+  /**
+   * Minimum spacing between edges and nodes
+   */
   offset: number;
 }
 
 /**
- * 参考文章：https://juejin.cn/post/6942727734518874142
+ * Calculate control points on the optimal path of an edge.
  *
  * Reference article: https://juejin.cn/post/6942727734518874142
  */
@@ -41,15 +42,13 @@ export const getControlPoints = ({
   let edgePoints: ControlPoint[] = [];
   let optimized: ReturnType<typeof optimizeInputPoints>;
 
-  // 1. 找到 offset 后的起止点
-  // 1. Find the starting and ending points after offset
+  // 1. Find the starting and ending points after applying the offset
   const sourceOffset = getOffsetPoint(oldSource, offset);
   const targetOffset = getOffsetPoint(oldTarget, offset);
   const expandedSource = getExpandedRect(sourceRect, offset);
   const expandedTarget = getExpandedRect(targetRect, offset);
 
-  // 2. 判断两个 Rect 是否离得比较近
-  // 2. Determine if the two Rects are relatively close
+  // 2. Determine if the two Rects are relatively close or should directly connected
   const minOffset = 2 * offset + 10;
   const isHorizontalLayout = isHorizontalFromPosition(oldSource.position);
   const isSameDirection = areLinesSameDirection(
@@ -67,19 +66,18 @@ export const getControlPoints = ({
   const isTooClose = isHorizontalLayout
     ? sides.right - sides.left < minOffset
     : sides.bottom - sides.top < minOffset;
-  const isDirectLink = isHorizontalLayout
+  const isDirectConnect = isHorizontalLayout
     ? isSameDirection && source.x < target.x
     : isSameDirection && source.y < target.y;
 
-  if (isTooClose || isDirectLink) {
-    // 3. 如果两个 Rect 离得比较近或直接连接，则返回简单 Path
+  if (isTooClose || isDirectConnect) {
     // 3. If the two Rects are relatively close or directly connected, return a simple Path
     edgePoints = getSimplePath({
       source,
       target,
       sourceOffset,
       targetOffset,
-      isDirectLink,
+      isDirectConnect,
     });
     optimized = optimizeInputPoints({
       source: oldSource,
@@ -90,13 +88,11 @@ export const getControlPoints = ({
     });
     edgePoints = optimized.edgePoints;
   } else {
-    // 3. 找到两个 expand 后 Rect 的顶点
     // 3. Find the vertices of the two expanded Rects
     edgePoints = [
       ...getVerticesFromRectVertex(expandedSource, targetOffset),
       ...getVerticesFromRectVertex(expandedTarget, sourceOffset),
     ];
-    // 4. 找到可能的中点和交点
     // 4. Find possible midpoints and intersections
     edgePoints = edgePoints.concat(
       getCenterPoints({
@@ -106,7 +102,6 @@ export const getControlPoints = ({
         targetOffset,
       })
     );
-    // 5. 合并相近坐标点，去除重复的坐标点
     // 5. Merge nearby coordinate points and remove duplicate coordinate points
     optimized = optimizeInputPoints({
       source: oldSource,
@@ -115,12 +110,9 @@ export const getControlPoints = ({
       targetOffset,
       edgePoints,
     });
-    // 6. 寻找最优路径
     // 6. Find the optimal path
     edgePoints = getAStarPath({
       points: optimized.edgePoints,
-      // 以下的起止点信息用于优化折线策略
-      // The following start and end point information is used to optimize the polyline strategy
       source: optimized.source,
       target: optimized.target,
       sourceRect: getExpandedRect(sourceRect, offset / 2),
