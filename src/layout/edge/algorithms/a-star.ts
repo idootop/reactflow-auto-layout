@@ -9,6 +9,7 @@ import {
 interface GetAStarPathParams {
   points: ControlPoint[];
   // 以下的起止点信息用于优化折线策略
+  // The following start and end point information is used to optimize the polyline strategy
   source: ControlPoint;
   target: ControlPoint;
   sourceRect: NodeRect;
@@ -137,6 +138,12 @@ interface GetNextNeighborPointsParams {
  * - 连线在水平或竖直方向上
  * - 连线不与两端 Node 相交
  * - 连线不与前面的线段反向（重叠）
+ * 
+ * Get the set of possible neighboring points for the current control point
+ * 
+ * - The line is in a horizontal or vertical direction
+ * - The line does not intersect with the two end nodes
+ * - The line does not overlap with the previous line segment in reverse direction
  */
 export const getNextNeighborPoints = ({
   points,
@@ -150,16 +157,18 @@ export const getNextNeighborPoints = ({
       return false;
     }
     // 连线在水平或竖直方向上
+    // The connection is in the horizontal or vertical direction
     const rightDirection = p.x === current.x || p.y === current.y;
     // 与前面的线段反向（重叠）
+    // Reverse with the previous line segment (overlap)
     const reverseDirection = previous
       ? areLinesReverseDirection(previous, current, current, p)
       : false;
     return (
-      rightDirection && // 连线在水平或竖直方向上
-      !reverseDirection && // 不与前面的线段反向（重叠）
-      !isSegmentCrossingRect(p, current, sourceRect) && // 不与 sourceNode 相交
-      !isSegmentCrossingRect(p, current, targetRect) // 不与 targetNode 相交
+      rightDirection && // 连线在水平或竖直方向上 // The line is in a horizontal or vertical direction
+      !reverseDirection && // 不与前面的线段反向（重叠） // The line does not overlap with the previous line segment in reverse direction
+      !isSegmentCrossingRect(p, current, sourceRect) && // 不与 sourceNode 相交 // Does not intersect with sourceNode
+      !isSegmentCrossingRect(p, current, targetRect) // 不与 targetNode 相交 // Does not intersect with targetNode
     );
   });
 };
@@ -168,6 +177,7 @@ interface HeuristicCostParams {
   from: ControlPoint;
   to: ControlPoint;
   // 起止点
+  // Start and end points
   start: ControlPoint;
   end: ControlPoint;
   source: ControlPoint;
@@ -180,6 +190,12 @@ interface HeuristicCostParams {
  * - 距离之和越小越好
  * - 起止线段与起止方向相同越好
  * - 拐点在线段中间对称/居中越好
+ *
+ * Connection point distance loss function
+ *
+ * - The smaller the sum of distances, the better
+ * - The closer the start and end line segments are in direction, the better
+ * - The better the inflection point is symmetric or centered in the line segment
  */
 const heuristicCostEstimate = ({
   from,
@@ -207,6 +223,10 @@ const heuristicCostEstimate = ({
  * 计算两点之间的预估距离
  *
  * 曼哈顿距离：水平、竖直方向距离之和，计算速度更快
+ *
+ * Calculate the estimated distance between two points
+ *
+ * Manhattan distance: the sum of horizontal and vertical distances, faster calculation speed
  */
 const estimateDistance = (p1: ControlPoint, p2: ControlPoint): number =>
   Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);

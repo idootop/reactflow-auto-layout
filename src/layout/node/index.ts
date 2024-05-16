@@ -18,18 +18,26 @@ export type ReactflowLayoutConfig = {
   algorithm: LayoutAlgorithms;
   /**
    * 布局方向
+   *
+   * Layout direction
    */
   direction: LayoutDirection;
   /**
    * 是否隐藏布局
+   *
+   * Whether to hide the layout
    */
   visibility: LayoutVisibility;
   /**
    * 布局间隔
+   *
+   * Layout interval
    */
   spacing: LayoutSpacing;
   /**
    * 是否反向输出端口排序
+   *
+   * Whether the output port is sorted
    */
   reverseSourceHandles: boolean;
 };
@@ -70,6 +78,7 @@ export const layoutReactflow = async (options: ILayoutReactflow): Promise<Reactf
   let result = await layout({ ...config, nodes, edges });
   if (!result) {
     // 如果布局失败，fallback 到 origin 布局
+    // If the layout fails, fallback to the origin layout
     result = await layoutReactflow({ ...config, nodes, edges, algorithm: 'origin' });
   }
   return result!;
