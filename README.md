@@ -52,8 +52,6 @@ This demo is divided into several modules based on functionality, most of which 
 
 These are the key modules of the project. While it might seem complex at first, the overall logic is straightforward. If you have any questions, feel free to raise an [issue](https://github.com/idootop/reactflow-auto-layout/issues).
 
-> PS: The code comments are mostly in Chinese, which might be challenging :)
-
 # ❤️ Acknowledgement
 
 1. The [D3-hierarchy](https://github.com/d3/d3-hierarchy) auto layout approach mainly refers to: [flanksource-ui](https://github.com/flanksource/flanksource-ui/blob/75b35591d3bbc7d446fa326d0ca7536790f38d88/src/ui/Graphs/Layouts/algorithms/d3-hierarchy.ts)
