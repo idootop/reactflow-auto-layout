@@ -40,14 +40,12 @@ export function getBasePath({
       position: targetPosition,
     },
     sourceRect: {
-      x: sourceNode.position.x,
-      y: sourceNode.position.y,
+      ...(sourceNode.positionAbsolute || sourceNode.position),
       width: sourceNode.width!,
       height: sourceNode.height!,
     },
     targetRect: {
-      x: targetNode.position.x,
-      y: targetNode.position.y,
+      ...(targetNode.positionAbsolute || targetNode.position),
       width: targetNode.width!,
       height: targetNode.height!,
     },
