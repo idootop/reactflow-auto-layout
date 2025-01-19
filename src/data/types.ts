@@ -1,8 +1,8 @@
-import { Edge, Node, XYPosition } from "reactflow";
+import { Edge, Node, XYPosition } from "@xyflow/react";
 
 import { ControlPoint } from "../layout/edge/point";
 
-interface WorkflowNode {
+interface WorkflowNode extends Record<string, unknown> {
   id: string;
   type: string;
 }
@@ -19,12 +19,6 @@ export interface Workflow {
   nodes: WorkflowNode[];
   edges: WorkflowEdge[];
 }
-
-export type ReactflowNode<
-  D = any,
-  T extends string | undefined = string | undefined
-> = Node<D, T>;
-export type ReactflowEdge<D = any> = Edge<D>;
 
 export type ReactflowNodeData = WorkflowNode & {
   /**
@@ -84,7 +78,7 @@ export interface EdgeLayout {
   inputPoints: ControlPoint[];
 }
 
-export interface ReactflowEdgeData {
+export interface ReactflowEdgeData extends Record<string, unknown> {
   /**
    * Data related to the current edge's layout, such as control points.
    */
@@ -93,8 +87,12 @@ export interface ReactflowEdgeData {
   targetPort: ReactflowEdgePort;
 }
 
-export type ReactflowNodeWithData = ReactflowNode<ReactflowNodeData>;
-export type ReactflowEdgeWithData = ReactflowEdge<ReactflowEdgeData>;
+export type ReactflowBaseNode = Node<ReactflowNodeData, "base">;
+export type ReactflowStartNode = Node<ReactflowNodeData, "start">;
+export type ReactflowNodeWithData = ReactflowBaseNode | ReactflowStartNode;
+
+export type ReactflowBaseEdge = Edge<ReactflowEdgeData, "base">;
+export type ReactflowEdgeWithData = ReactflowBaseEdge;
 
 export interface Reactflow {
   nodes: ReactflowNodeWithData[];

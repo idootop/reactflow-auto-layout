@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef } from "react";
-import { XYPosition } from "reactflow";
+import { XYPosition } from "@xyflow/react";
 import { XSta, useXState } from "xsta";
 
 import { isEqualPoint } from "../../../layout/edge/point";

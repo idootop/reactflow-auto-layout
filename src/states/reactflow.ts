@@ -1,5 +1,5 @@
-import type { useStoreApi } from "reactflow";
-import { ReactFlowInstance } from "reactflow";
+import type { useStoreApi } from "@xyflow/react";
+import { ReactFlowInstance } from "@xyflow/react";
 
 import { ReactflowEdgeWithData, ReactflowNodeWithData } from "../data/types";
 
@@ -9,8 +9,10 @@ export const kReactflow: {
 } = {};
 
 export const getReactflowData = () => {
-  const nodes: ReactflowNodeWithData[] = kReactflow.instance?.getNodes() ?? [];
-  const edges: ReactflowEdgeWithData[] = kReactflow.instance?.getEdges() ?? [];
+  const nodes = (kReactflow.instance?.getNodes() ??
+    []) as ReactflowNodeWithData[];
+  const edges = (kReactflow.instance?.getEdges() ??
+    []) as ReactflowEdgeWithData[];
   return {
     nodes,
     edges,

@@ -1,12 +1,12 @@
 import "./styles.css";
 
 import { ComponentType, memo } from "react";
-import { Handle, NodeProps, Position } from "reactflow";
+import { Handle, NodeProps, Position } from "@xyflow/react";
 
-import { ReactflowNodeData } from "@/data/types";
+import { ReactflowBaseNode } from "@/data/types";
 import { kReactflowLayoutConfig } from "@/components/ControlPanel";
 
-export const BaseNode: ComponentType<NodeProps<ReactflowNodeData>> = memo(
+export const BaseNode: ComponentType<NodeProps<ReactflowBaseNode>> = memo(
   ({ data }) => {
     const { direction, reverseSourceHandles } = kReactflowLayoutConfig.state;
     const isHorizontal = direction === "horizontal";

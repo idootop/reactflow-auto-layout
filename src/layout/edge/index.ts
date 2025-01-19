@@ -1,4 +1,4 @@
-import { EdgeLayout, ReactflowNodeWithData } from "../../data/types";
+import { EdgeLayout } from "../../data/types";
 import { kReactflow } from "../../states/reactflow";
 import { getControlPoints, GetControlPointsParams } from "./algorithms";
 import { getLabelPosition, getPathWithRoundCorners } from "./edge";
@@ -20,10 +20,9 @@ export function getBasePath({
   sourcePosition,
   targetPosition,
 }: any) {
-  const sourceNode: ReactflowNodeWithData =
-    kReactflow.instance!.getNode(source)!;
-  const targetNode: ReactflowNodeWithData =
-    kReactflow.instance!.getNode(target)!;
+  const sourceNode = kReactflow.instance!.getInternalNode(source)!;
+  const targetNode = kReactflow.instance!.getInternalNode(target)!;
+
   return getPathWithPoints({
     offset,
     borderRadius,
@@ -40,12 +39,12 @@ export function getBasePath({
       position: targetPosition,
     },
     sourceRect: {
-      ...(sourceNode.positionAbsolute || sourceNode.position),
+      ...(sourceNode.internals.positionAbsolute || sourceNode.position),
       width: sourceNode.width!,
       height: sourceNode.height!,
     },
     targetRect: {
-      ...(targetNode.positionAbsolute || targetNode.position),
+      ...(targetNode.internals.positionAbsolute || targetNode.position),
       width: targetNode.width!,
       height: targetNode.height!,
     },

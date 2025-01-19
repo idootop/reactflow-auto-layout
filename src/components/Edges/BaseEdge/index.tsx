@@ -1,5 +1,5 @@
 import { ComponentType, memo } from "react";
-import { EdgeProps, BaseEdge as _BaseEdge } from "reactflow";
+import { EdgeProps, BaseEdge as _BaseEdge } from "@xyflow/react";
 
 import { ReactflowEdgeWithData } from "@/data/types";
 import { isConnectionBackward } from "@/layout/edge/edge";
@@ -8,7 +8,12 @@ import { kReactflow } from "@/states/reactflow";
 import { EdgeControllers } from "../EdgeController";
 import { useRebuildEdge } from "./useRebuildEdge";
 
-export const BaseEdge: ComponentType<EdgeProps<ReactflowEdgeWithData>> = memo(
+export const BaseEdge: ComponentType<
+  EdgeProps & {
+    data: any;
+    type: any;
+  }
+> = memo(
   ({
     id,
     selected,
@@ -49,7 +54,7 @@ export const BaseEdge: ComponentType<EdgeProps<ReactflowEdgeWithData>> = memo(
 
     const { color, edgeType, pathType } = getEdgeStyles({ id, isBackward });
 
-    const edge: ReactflowEdgeWithData = kReactflow.instance!.getEdge(id)!;
+    const edge = kReactflow.instance!.getEdge(id)! as ReactflowEdgeWithData;
 
     const offset = 20;
     const borderRadius = 12;

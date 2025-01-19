@@ -1,15 +1,16 @@
-import "reactflow/dist/style.css";
+import "@xyflow/react/dist/style.css";
 
-import { useEffect } from "react";
-import ReactFlow, {
+import {
   Background,
   BackgroundVariant,
   Controls,
   MiniMap,
+  ReactFlow,
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
-} from "reactflow";
+} from "@xyflow/react";
+import { useEffect } from "react";
 
 import { jsonDecode } from "@/utils/base";
 
@@ -18,8 +19,8 @@ import { kEdgeTypes } from "./components/Edges";
 import { ColorfulMarkerDefinitions } from "./components/Edges/Marker";
 import { kNodeTypes } from "./components/Nodes";
 import { ReactflowInstance } from "./components/ReactflowInstance";
-import defaultWorkflow from "./data/data.json";
 import { workflow2reactflow } from "./data/convert";
+import defaultWorkflow from "./data/data.json";
 import { kDefaultLayoutConfig, ReactflowLayoutConfig } from "./layout/node";
 import { useAutoLayout } from "./layout/useAutoLayout";
 
@@ -27,14 +28,14 @@ const EditWorkFlow = () => {
   const [nodes, _setNodes, onNodesChange] = useNodesState([]);
   const [edges, _setEdges, onEdgesChange] = useEdgesState([]);
 
-  const { layout, layouting } = useAutoLayout();
+  const { layout, isDirty } = useAutoLayout();
 
   const layoutReactflow = async (
     props: ReactflowLayoutConfig & {
       workflow: string;
     }
   ) => {
-    if (layouting) {
+    if (isDirty) {
       return;
     }
     const input = props.workflow;
@@ -44,12 +45,11 @@ const EditWorkFlow = () => {
       return;
     }
     const workflow = workflow2reactflow(data);
-    await layout({ ...workflow, ...props });
+    layout({ ...workflow, ...props });
   };
 
   useEffect(() => {
     const { nodes, edges } = workflow2reactflow(defaultWorkflow as any);
-    console.log({ nodes, edges });
     layout({ nodes, edges, ...kDefaultLayoutConfig });
   }, []);
 
@@ -75,13 +75,7 @@ const EditWorkFlow = () => {
         <Background id="0" color="#ccc" variant={BackgroundVariant.Dots} />
         <ReactflowInstance />
         <Controls />
-        <MiniMap
-          pannable
-          zoomable
-          maskColor="transparent"
-          maskStrokeColor="black"
-          maskStrokeWidth={10}
-        />
+        <MiniMap pannable zoomable />
         <ControlPanel layoutReactflow={layoutReactflow} />
       </ReactFlow>
     </div>

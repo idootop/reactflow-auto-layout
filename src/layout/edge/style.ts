@@ -1,5 +1,5 @@
 import { deepClone, lastOf } from "@/utils/base";
-import { Position, getBezierPath } from "reactflow";
+import { Position, getBezierPath } from "@xyflow/react";
 
 import { getBasePath } from ".";
 import {
@@ -21,7 +21,7 @@ interface EdgeStyle {
 
 /**
  * Get the style of the connection line
- * 
+ *
  * 1. When there are more than 3 edges connecting to both ends of the Node, use multiple colors to distinguish the edges.
  * 2. When the connection line goes backward or connects to a hub Node, use dashed lines to distinguish the edges.
  * 3. When the connection line goes from a hub to a Node, use bezier path.
@@ -36,7 +36,7 @@ export const getEdgeStyles = (props: {
     // Use dashed lines to distinguish the edges when the connection line goes backward or connects to a hub Node
     return { color: kNoMarkerColor, edgeType: "dashed", pathType: "base" };
   }
-  const edge: ReactflowEdgeWithData = kReactflow.instance!.getEdge(id)!;
+  const edge = kReactflow.instance!.getEdge(id)! as ReactflowEdgeWithData;
   if (edge.data!.targetPort.edges > 2) {
     // Use dashed bezier path when the connection line connects to a hub Node
     return {

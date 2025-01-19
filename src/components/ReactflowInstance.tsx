@@ -1,4 +1,4 @@
-import { useReactFlow, useStoreApi } from "reactflow";
+import { useReactFlow, useStoreApi } from "@xyflow/react";
 
 import { kReactflow } from "../states/reactflow";
 

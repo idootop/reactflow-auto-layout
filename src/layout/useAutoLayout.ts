@@ -6,27 +6,31 @@ import { getReactflowData, kReactflow } from "../states/reactflow";
 import { getRootNode } from "./metadata";
 import { ILayoutReactflow, layoutReactflow } from "./node";
 
-export const layoutWithFlush = async (options: ILayoutReactflow) => {
+const layoutWithFlush = async (options: ILayoutReactflow) => {
   const layout = await layoutReactflow(options);
   kReactflow.instance?.setNodes(layout.nodes);
   kReactflow.instance?.setEdges(layout.edges);
-  // Wait for render to complete
-  await nextTick(10);
+
+  // Check if the node has been correctly measured. Adjust the condition as needed based on your use case.
+  const isMeasured = () => !!kReactflow.instance?.getNodes()[0]?.measured;
+  while (!isMeasured()) {
+    await nextTick(10);
+  }
+
   const { nodes, edges } = getReactflowData();
   return { layout, nodes, edges };
 };
 
 export const useAutoLayout = () => {
-  const [layouting, setLayouting] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
 
   const layout = async (options: ILayoutReactflow) => {
-    if (!kReactflow.instance || layouting || options.nodes.length < 1) {
+    if (!kReactflow.instance || isDirty || options.nodes.length < 1) {
       return;
     }
-    const isHorizontal = options.direction === "horizontal";
 
-    setLayouting(true);
-    // Perform the first layout to acquire node sizes
+    setIsDirty(true);
+    // Perform the first layout to measure node sizes
     const firstLayout = await layoutWithFlush({
       ...options,
       visibility: "hidden", // Hide layout during the first layout pass
@@ -38,20 +42,21 @@ export const useAutoLayout = () => {
       nodes: firstLayout.nodes ?? options.nodes,
       edges: firstLayout.edges ?? options.edges,
     });
-    setLayouting(false);
+    setIsDirty(false);
 
     // Center the viewpoint to the position of the root node
     const root = getRootNode(secondLayout.layout.nodes);
     // Give it a little offset so it's visually centered
-    const offset = isHorizontal
-      ? {
-          x: 0.2 * document.body.clientWidth,
-          y: 0 * document.body.clientHeight,
-        }
-      : {
-          x: 0 * document.body.clientHeight,
-          y: 0.3 * document.body.clientHeight,
-        };
+    const offset =
+      options.direction === "horizontal"
+        ? {
+            x: 0.2 * document.body.clientWidth,
+            y: 0 * document.body.clientHeight,
+          }
+        : {
+            x: 0 * document.body.clientHeight,
+            y: 0.3 * document.body.clientHeight,
+          };
     if (root) {
       kReactflow.instance.setCenter(
         root.position.x + offset.x,
@@ -64,5 +69,5 @@ export const useAutoLayout = () => {
     return secondLayout.layout;
   };
 
-  return { layout, layouting };
+  return { layout, isDirty };
 };

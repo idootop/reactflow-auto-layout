@@ -1,4 +1,4 @@
-import { Position, XYPosition } from "reactflow";
+import { Position, XYPosition } from "@xyflow/react";
 
 import { uuid } from "@/utils/uuid";
 

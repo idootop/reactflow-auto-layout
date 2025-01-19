@@ -1,4 +1,4 @@
-import { EdgeLabelRenderer, Position } from "reactflow";
+import { EdgeLabelRenderer, Position } from "@xyflow/react";
 
 import { getLineCenter, ILine } from "@/layout/edge/edge";
 import { ControlPoint } from "@/layout/edge/point";

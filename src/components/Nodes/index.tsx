@@ -1,4 +1,4 @@
-import { NodeTypes } from 'reactflow';
+import { NodeTypes } from '@xyflow/react';
 import { BaseNode } from './BaseNode';
 
 export const kNodeTypes: NodeTypes = {

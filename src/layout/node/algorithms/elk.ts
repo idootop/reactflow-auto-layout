@@ -1,5 +1,5 @@
 import ELK from "elkjs/lib/elk.bundled.js";
-import { getIncomers } from "reactflow";
+import { getIncomers } from "@xyflow/react";
 
 import { ReactflowNodeWithData } from "@/data/types";
 import { LayoutAlgorithm, LayoutAlgorithmProps } from "..";

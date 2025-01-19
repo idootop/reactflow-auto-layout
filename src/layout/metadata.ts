@@ -1,11 +1,10 @@
-import { MarkerType, Position } from "reactflow";
+import { MarkerType, Position } from "@xyflow/react";
 
 import {
   Reactflow,
   ReactflowEdgeWithData,
   ReactflowNodeWithData,
 } from "../data/types";
-import { kReactflow } from "../states/reactflow";
 import { LayoutDirection, LayoutVisibility } from "./node";
 
 export const getRootNode = (nodes: Reactflow["nodes"]) => {
@@ -16,12 +15,10 @@ export const getNodeSize = (
   node: ReactflowNodeWithData,
   defaultSize = { width: 150, height: 36 }
 ) => {
-  const internalNode = kReactflow.store
-    ?.getState()
-    ?.nodeInternals?.get(node.id);
-  const nodeWith = internalNode?.width;
-  const nodeHeight = internalNode?.height;
+  const nodeWith = node.measured?.width;
+  const nodeHeight = node.measured?.height;
   const hasDimension = [nodeWith, nodeHeight].every((e) => e != null);
+
   return {
     hasDimension,
     width: nodeWith,
@@ -40,13 +37,14 @@ export type IFixPosition = (pros: {
   x: number;
   y: number;
 };
+
 export const getNodeLayouted = (props: {
   node: ReactflowNodeWithData;
   position: { x: number; y: number };
   direction: LayoutDirection;
   visibility: LayoutVisibility;
   fixPosition?: IFixPosition;
-}) => {
+}): ReactflowNodeWithData => {
   const {
     node,
     position,
@@ -54,18 +52,17 @@ export const getNodeLayouted = (props: {
     visibility,
     fixPosition = (p) => ({ x: p.x, y: p.y }),
   } = props;
+
   const hidden = visibility !== "visible";
   const isHorizontal = direction === "horizontal";
   const { width, height, widthWithDefault, heightWithDefault } =
     getNodeSize(node);
-  node.targetPosition = isHorizontal ? Position.Left : Position.Top;
-  node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
+
   return {
     ...node,
     type: "base",
     width,
     height,
-    hidden,
     position: fixPosition({
       ...position,
       width: widthWithDefault,
@@ -77,27 +74,28 @@ export const getNodeLayouted = (props: {
     },
     style: {
       ...node.style,
-      opacity: hidden ? 0 : 1,
+      visibility: hidden ? "hidden" : "visible",
     },
+    targetPosition: isHorizontal ? Position.Left : Position.Top,
+    sourcePosition: isHorizontal ? Position.Right : Position.Bottom,
   };
 };
 
 export const getEdgeLayouted = (props: {
   edge: ReactflowEdgeWithData;
   visibility: LayoutVisibility;
-}) => {
+}): ReactflowEdgeWithData => {
   const { edge, visibility } = props;
   const hidden = visibility !== "visible";
   return {
     ...edge,
-    hidden,
     type: "base",
     markerEnd: {
       type: MarkerType.ArrowClosed,
     },
     style: {
       ...edge.style,
-      opacity: hidden ? 0 : 1,
+      visibility: hidden ? "hidden" : "visible",
     },
   };
 };

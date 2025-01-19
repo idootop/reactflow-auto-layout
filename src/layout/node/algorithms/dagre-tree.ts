@@ -1,5 +1,5 @@
 import dagre from "@dagrejs/dagre";
-import { getIncomers } from "reactflow";
+import { getIncomers } from "@xyflow/react";
 
 import { ReactflowNodeWithData } from "@/data/types";
 import { LayoutAlgorithm } from "..";
