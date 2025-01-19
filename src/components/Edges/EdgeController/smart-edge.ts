@@ -523,9 +523,9 @@ export class SmartEdge {
   };
 
   rebuildEdge = (points: ControlPoint[]) => {
-    const edge: ReactflowEdgeWithData = kReactflow.instance!.getEdge(
+    const edge = kReactflow.instance!.getEdge(
       this.ctx.id
-    )!;
+    )! as ReactflowEdgeWithData;
     edge.data!.layout!.points = reducePoints(points);
     rebuildEdge(this.ctx.id);
   };

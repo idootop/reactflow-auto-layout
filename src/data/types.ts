@@ -4,7 +4,7 @@ import { ControlPoint } from "../layout/edge/point";
 
 interface WorkflowNode extends Record<string, unknown> {
   id: string;
-  type: string;
+  type: "base" | "start";
 }
 
 interface WorkflowEdge {
