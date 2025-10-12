@@ -1,7 +1,7 @@
+import { deepClone, lastOf, deepEqual } from '@del-wang/utils';
 import { getBezierPath, type Position } from '@xyflow/react';
 
-import { deepClone, lastOf } from '@/utils/base';
-
+import { getBasePath } from '.';
 import {
   kBaseMarkerColor,
   kBaseMarkerColors,
@@ -10,8 +10,6 @@ import {
 } from '../../components/Edges/Marker';
 import type { EdgeLayout, ReactflowEdgeWithData } from '../../data/types';
 import { kReactflow } from '../../states/reactflow';
-import { isEqual } from '../../utils/diff';
-import { getBasePath } from '.';
 import { getPathWithRoundCorners } from './edge';
 
 interface EdgeStyle {
@@ -89,9 +87,9 @@ export function layoutEdge({
   targetPosition,
 }: ILayoutEdge): EdgeLayout {
   const relayoutDeps = [sourceX, sourceY, targetX, targetY];
-  const needRelayout = !isEqual(relayoutDeps, layout?.deps?.relayoutDeps);
+  const needRelayout = !deepEqual(relayoutDeps, layout?.deps?.relayoutDeps);
   const reBuildPathDeps = layout?.points;
-  const needReBuildPath = !isEqual(
+  const needReBuildPath = !deepEqual(
     reBuildPathDeps,
     layout?.deps?.reBuildPathDeps,
   );

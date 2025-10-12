@@ -1,10 +1,10 @@
+import { uuid } from '@del-wang/utils';
 import { EdgeLabelRenderer, type Position } from '@xyflow/react';
 import { useMemo } from 'react';
 
 import { getLineCenter } from '@/layout/edge/edge';
 import type { ControlPoint } from '@/layout/edge/point';
 import { kReactflow } from '@/states/reactflow';
-import { uuid } from '@/utils/uuid';
 
 import { getEdgeContext, SmartEdge } from './smart-edge';
 import { useEdgeDraggable } from './useEdgeDraggable';

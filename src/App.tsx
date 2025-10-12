@@ -1,5 +1,6 @@
 import '@xyflow/react/dist/style.css';
 
+import { jsonDecode } from '@del-wang/utils';
 import {
   Background,
   BackgroundVariant,
@@ -11,8 +12,6 @@ import {
   useNodesState,
 } from '@xyflow/react';
 import { useEffect, useId } from 'react';
-
-import { jsonDecode } from '@/utils/base';
 
 import { ControlPanel } from './components/ControlPanel';
 import { kEdgeTypes } from './components/Edges';

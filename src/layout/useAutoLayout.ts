@@ -1,6 +1,5 @@
+import { nextTick } from '@del-wang/utils/web';
 import { useState } from 'react';
-
-import { nextTick } from '@/utils/base';
 
 import { getReactflowData, kReactflow } from '../states/reactflow';
 import { type ILayoutReactflow, layoutReactflow } from './node';

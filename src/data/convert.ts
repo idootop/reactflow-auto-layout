@@ -1,4 +1,4 @@
-import { lastOf } from '@/utils/base';
+import { lastOf } from '@del-wang/utils';
 
 import type { Reactflow, Workflow } from './types';
 

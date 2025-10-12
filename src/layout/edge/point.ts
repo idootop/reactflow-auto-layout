@@ -1,6 +1,5 @@
+import { uuid } from '@del-wang/utils';
 import { Position } from '@xyflow/react';
-
-import { uuid } from '@/utils/uuid';
 
 import { isHorizontalFromPosition } from './edge';
 

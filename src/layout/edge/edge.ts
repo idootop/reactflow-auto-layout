@@ -1,6 +1,5 @@
+import { uuid } from '@del-wang/utils';
 import { Position, type XYPosition } from '@xyflow/react';
-
-import { uuid } from '@/utils/uuid';
 
 import type { ControlPoint, HandlePosition } from './point';
 

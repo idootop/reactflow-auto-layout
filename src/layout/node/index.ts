@@ -1,4 +1,4 @@
-import { removeEmpty } from '@/utils/base';
+import { removeEmpty } from '@del-wang/utils';
 
 import type { Reactflow } from '../../data/types';
 import {

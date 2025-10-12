@@ -1,4 +1,4 @@
-import { uuid } from '@/utils/uuid';
+import { uuid } from '@del-wang/utils';
 
 import type { LayoutDirection } from '../../node';
 import { type ControlPoint, isInLine, isOnLine } from '../point';

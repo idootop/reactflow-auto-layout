@@ -1,3 +1,5 @@
+import { uuid } from '@del-wang/utils';
+
 import type { ReactflowEdgeWithData } from '@/data/types';
 import {
   areLinesReverseDirection,
@@ -12,10 +14,9 @@ import {
   reducePoints,
 } from '@/layout/edge/point';
 import { kReactflow } from '@/states/reactflow';
-import { uuid } from '@/utils/uuid';
 
-import { rebuildEdge } from '../BaseEdge/useRebuildEdge';
 import type { EdgeControllersParams } from '.';
+import { rebuildEdge } from '../BaseEdge/useRebuildEdge';
 
 interface EdgeContext extends EdgeControllersParams {
   source: ControlPoint;
