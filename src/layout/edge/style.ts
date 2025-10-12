@@ -1,7 +1,8 @@
-import { deepClone, lastOf, deepEqual } from '@del-wang/utils';
+import { deepClone, deepEqual, lastOf } from '@del-wang/utils';
 import { getBezierPath, type Position } from '@xyflow/react';
 
-import { getBasePath } from '.';
+import { flowStore } from '@/states/reactflow';
+
 import {
   kBaseMarkerColor,
   kBaseMarkerColors,
@@ -9,7 +10,7 @@ import {
   kYesMarkerColor,
 } from '../../components/Edges/Marker';
 import type { EdgeLayout, ReactflowEdgeWithData } from '../../data/types';
-import { kReactflow } from '../../states/reactflow';
+import { getBasePath } from '.';
 import { getPathWithRoundCorners } from './edge';
 
 interface EdgeStyle {
@@ -35,7 +36,7 @@ export const getEdgeStyles = (props: {
     // Use dashed lines to distinguish the edges when the connection line goes backward or connects to a hub Node
     return { color: kNoMarkerColor, edgeType: 'dashed', pathType: 'base' };
   }
-  const edge = kReactflow.instance!.getEdge(id)! as ReactflowEdgeWithData;
+  const edge = flowStore.value.getEdge(id)! as ReactflowEdgeWithData;
   if (edge.data!.targetPort.edges > 2) {
     // Use dashed bezier path when the connection line connects to a hub Node
     return {

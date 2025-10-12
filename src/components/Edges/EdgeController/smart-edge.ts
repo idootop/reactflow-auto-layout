@@ -13,10 +13,10 @@ import {
   getOffsetPoint,
   reducePoints,
 } from '@/layout/edge/point';
-import { kReactflow } from '@/states/reactflow';
+import { flowStore } from '@/states/reactflow';
 
-import type { EdgeControllersParams } from '.';
 import { rebuildEdge } from '../BaseEdge/useRebuildEdge';
+import type { EdgeControllersParams } from '.';
 
 interface EdgeContext extends EdgeControllersParams {
   source: ControlPoint;
@@ -524,9 +524,7 @@ export class SmartEdge {
   };
 
   rebuildEdge = (points: ControlPoint[]) => {
-    const edge = kReactflow.instance!.getEdge(
-      this.ctx.id,
-    )! as ReactflowEdgeWithData;
+    const edge = flowStore.value.getEdge(this.ctx.id)! as ReactflowEdgeWithData;
     edge.data!.layout!.points = reducePoints(points);
     rebuildEdge(this.ctx.id);
   };

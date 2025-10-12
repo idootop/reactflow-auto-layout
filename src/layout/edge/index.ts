@@ -1,5 +1,6 @@
+import { flowStore } from '@/states/reactflow';
+
 import type { EdgeLayout } from '../../data/types';
-import { kReactflow } from '../../states/reactflow';
 import { type GetControlPointsParams, getControlPoints } from './algorithms';
 import { getLabelPosition, getPathWithRoundCorners } from './edge';
 
@@ -20,8 +21,8 @@ export function getBasePath({
   sourcePosition,
   targetPosition,
 }: any) {
-  const sourceNode = kReactflow.instance!.getInternalNode(source)!;
-  const targetNode = kReactflow.instance!.getInternalNode(target)!;
+  const sourceNode = flowStore.value.getInternalNode(source)!;
+  const targetNode = flowStore.value.getInternalNode(target)!;
 
   return getPathWithPoints({
     offset,

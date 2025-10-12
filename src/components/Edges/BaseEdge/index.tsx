@@ -4,7 +4,7 @@ import { type ComponentType, memo } from 'react';
 import type { ReactflowEdgeWithData } from '@/data/types';
 import { isConnectionBackward } from '@/layout/edge/edge';
 import { getEdgeStyles, layoutEdge } from '@/layout/edge/style';
-import { kReactflow } from '@/states/reactflow';
+import { flowStore } from '@/states/reactflow';
 
 import { EdgeControllers } from '../EdgeController';
 import { useRebuildEdge } from './useRebuildEdge';
@@ -55,7 +55,7 @@ export const BaseEdge: ComponentType<
 
     const { color, edgeType, pathType } = getEdgeStyles({ id, isBackward });
 
-    const edge = kReactflow.instance!.getEdge(id)! as ReactflowEdgeWithData;
+    const edge = flowStore.value.getEdge(id)! as ReactflowEdgeWithData;
 
     const offset = 20;
     const borderRadius = 12;

@@ -1,28 +1,28 @@
 import { nextTick } from '@del-wang/utils/web';
 import { useState } from 'react';
 
-import { getReactflowData, kReactflow } from '../states/reactflow';
+import { flowStore } from '../states/reactflow';
 import { type ILayoutReactflow, layoutReactflow } from './node';
 
 const layoutWithFlush = async (options: ILayoutReactflow) => {
   const layout = await layoutReactflow(options);
 
   // Wait for the nodes and edges to be cleared
-  kReactflow.instance?.setNodes([]);
-  kReactflow.instance?.setEdges([]);
-  while (kReactflow.instance!.getNodes().length > 0) {
+  flowStore.value.setNodes([]);
+  flowStore.value.setEdges([]);
+  while (flowStore.value.getNodes().length > 0) {
     await nextTick(3);
   }
 
   // Wait for the nodes and edges to be measured
-  kReactflow.instance?.setNodes(layout.nodes);
-  kReactflow.instance?.setEdges(layout.edges);
-  while (!kReactflow.instance?.getNodes()[0]?.measured) {
+  flowStore.value.setNodes(layout.nodes);
+  flowStore.value.setEdges(layout.edges);
+  while (!flowStore.value.getNodes()[0]?.measured) {
     await nextTick(3);
   }
 
-  // Get the layout data
-  const { nodes, edges } = getReactflowData();
+  // Get layouted nodes and edges
+  const { nodes, edges } = flowStore.value.getNodesAndEdges();
   return { layout, nodes, edges };
 };
 
@@ -30,7 +30,7 @@ export const useAutoLayout = () => {
   const [isDirty, setIsDirty] = useState(false);
 
   const layout = async (options: ILayoutReactflow) => {
-    if (!kReactflow.instance || isDirty || options.nodes.length < 1) {
+    if (!flowStore.value.initialized || isDirty || options.nodes.length < 1) {
       return;
     }
 
@@ -50,8 +50,8 @@ export const useAutoLayout = () => {
     setIsDirty(false);
 
     // Center the viewpoint
-    await kReactflow.instance.fitView({ duration: 0 });
-    await kReactflow.instance.zoomTo(kReactflow.instance.getZoom() * 0.8);
+    await flowStore.value.fitView({ duration: 0 });
+    await flowStore.value.zoomTo(flowStore.value.getZoom() * 0.8);
 
     return secondLayout.layout;
   };

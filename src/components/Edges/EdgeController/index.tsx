@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import { getLineCenter } from '@/layout/edge/edge';
 import type { ControlPoint } from '@/layout/edge/point';
-import { kReactflow } from '@/states/reactflow';
+import { flowStore } from '@/states/reactflow';
 
 import { getEdgeContext, SmartEdge } from './smart-edge';
 import { useEdgeDraggable } from './useEdgeDraggable';
@@ -45,7 +45,7 @@ export const EdgeControllers = (props: EdgeControllersParams) => {
   return (
     <>
       {edges.map((edge) => {
-        return edge.canDrag && <EdgeController edge={edge} key={uuid()} />; // use uuid to force rebuild EdgeController
+        return edge.canDrag && <EdgeController edge={edge} key={uuid()} />; // use unique key to force rebuild EdgeController
       })}
     </>
   );
@@ -60,12 +60,11 @@ export const EdgeController = ({ edge }: { edge: SmartEdge }) => {
   const { dragRef } = useEdgeDraggable({
     edge,
     onDragging(dragId, dragFrom, position, delta) {
-      const oldFlowPosition = kReactflow.instance!.screenToFlowPosition({
+      const oldFlowPosition = flowStore.value.screenToFlowPosition({
         x: position.x - delta.x,
         y: position.y - delta.y,
       });
-      const newFlowPosition =
-        kReactflow.instance!.screenToFlowPosition(position);
+      const newFlowPosition = flowStore.value.screenToFlowPosition(position);
       const flowDelta = {
         x: newFlowPosition.x - oldFlowPosition.x,
         y: newFlowPosition.y - oldFlowPosition.y,

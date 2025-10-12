@@ -20,7 +20,8 @@
     "leva": "^0.10.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "xsta": "^3.0.1"
+    "xsta": "^3.0.1",
+    "zenbox": "^2.1.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.5",
