@@ -3,6 +3,7 @@
   "private": true,
   "version": "2.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.18.2",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -10,20 +11,21 @@
   },
   "dependencies": {
     "@dagrejs/dagre": "^1.1.2",
+    "@del-wang/utils": "^1.5.0",
     "@xyflow/react": "^12.3.6",
     "d3-dag": "^1.1.0",
     "d3-hierarchy": "^3.1.2",
     "elkjs": "^0.9.3",
     "leva": "^0.9.35",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "xsta": "^2.0.0"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "xsta": "^3.0.1"
   },
   "devDependencies": {
     "@types/d3-hierarchy": "^3.1.7",
     "@types/node": "^20.12.8",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
