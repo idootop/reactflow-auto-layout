@@ -35,13 +35,12 @@ export const EdgeControllers = (props: EdgeControllersParams) => {
         }),
       );
     }
-
     smartEdges.forEach((e, idx) => {
       e.previous = smartEdges[idx - 2];
       e.next = smartEdges[idx + 2];
     });
     return smartEdges;
-  }, [points.length]);
+  }, [points]);
 
   return (
     <>

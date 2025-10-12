@@ -74,9 +74,7 @@ export const useEdgeDraggable = (props: UseDraggableParams) => {
   };
 
   const onDragEnd = () => {
-    if (!getIsDragging()) {
-      return;
-    }
+    setGlobalCursorStyle('auto');
     SmartEdge.draggingEdge = undefined;
     propsRef.current.onDragEnd?.();
     // dispose states
@@ -91,6 +89,9 @@ export const useEdgeDraggable = (props: UseDraggableParams) => {
     if (!getIsDragging()) {
       return;
     }
+    const { start, end } = propsRef.current.edge;
+    const isHorizontal = start.y === end.y;
+    setGlobalCursorStyle(isHorizontal ? 'row-resize' : 'col-resize');
     if (event.buttons !== 1) {
       // Ending drag because it's not a left mouse button drag event
       return onDragEnd();
@@ -131,3 +132,16 @@ export const useEdgeDraggable = (props: UseDraggableParams) => {
 
   return { dragRef, isDragging: getIsDragging() };
 };
+
+function setGlobalCursorStyle(
+  cursorStyle: 'auto' | 'row-resize' | 'col-resize',
+) {
+  const oldStyle = document.getElementById('global-cursor-style');
+  if (oldStyle) oldStyle.remove();
+  if (cursorStyle !== 'auto') {
+    const style = document.createElement('style');
+    style.id = 'global-cursor-style';
+    style.innerHTML = `* { cursor: ${cursorStyle} !important; }`;
+    document.head.appendChild(style);
+  }
+}
