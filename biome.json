@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["@del-wang/config/biome"],
+  "linter": {
+    "rules": {
+      "suspicious": {
+        "useIterableCallbackReturn": "off"
+      }
+    }
+  }
+}
