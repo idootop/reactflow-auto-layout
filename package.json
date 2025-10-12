@@ -11,19 +11,19 @@
     "lint": "biome check --write --no-errors-on-unmatched --diagnostic-level=error ."
   },
   "dependencies": {
-    "@dagrejs/dagre": "^1.1.2",
+    "@dagrejs/dagre": "^1.1.5",
     "@del-wang/utils": "^1.5.0",
-    "@xyflow/react": "^12.3.6",
+    "@xyflow/react": "^12.8.6",
     "d3-dag": "^1.1.0",
     "d3-hierarchy": "^3.1.2",
-    "elkjs": "^0.9.3",
-    "leva": "^0.9.35",
+    "elkjs": "^0.11.0",
+    "leva": "^0.10.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "xsta": "^3.0.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.6",
+    "@biomejs/biome": "^2.2.5",
     "@del-wang/config": "^1.5.0",
     "@types/d3-hierarchy": "^3.1.7",
     "@types/node": "^24.7.2",

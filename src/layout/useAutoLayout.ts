@@ -51,8 +51,8 @@ export const useAutoLayout = () => {
     setIsDirty(false);
 
     // Center the viewpoint
-    kReactflow.instance.fitView();
-    kReactflow.instance.zoomTo(kReactflow.instance.getZoom() / 1.5);
+    await kReactflow.instance.fitView({ duration: 0 });
+    await kReactflow.instance.zoomTo(kReactflow.instance.getZoom() * 0.8);
 
     return secondLayout.layout;
   };
