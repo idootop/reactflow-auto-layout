@@ -1,10 +1,10 @@
-import { areLinesReverseDirection, areLinesSameDirection } from "../edge";
+import { areLinesReverseDirection, areLinesSameDirection } from '../edge';
 import {
-  ControlPoint,
-  NodeRect,
+  type ControlPoint,
   isEqualPoint,
   isSegmentCrossingRect,
-} from "../point";
+  type NodeRect,
+} from '../point';
 
 interface GetAStarPathParams {
   /**
@@ -23,7 +23,7 @@ interface GetAStarPathParams {
 /**
  * Utilizes the [A\* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm) combined with
  * [Manhattan Distance](https://simple.wikipedia.org/wiki/Manhattan_distance) to find the optimal path for edges.
- * 
+ *
  * @returns Control points including sourceOffset and targetOffset (not including source and target points).
  */
 export const getAStarPath = ({
@@ -51,12 +51,12 @@ export const getAStarPath = ({
       end,
       source,
       target,
-    })
+    }),
   );
 
   while (openSet.length) {
-    let current;
-    let currentIdx;
+    let current: ControlPoint | undefined;
+    let currentIdx: number;
     let lowestFScore = Infinity;
     openSet.forEach((p, idx) => {
       const score = fScore.get(p) ?? 0;
@@ -109,7 +109,7 @@ export const getAStarPath = ({
             end,
             source,
             target,
-          })
+          }),
       );
     }
   }
@@ -118,7 +118,7 @@ export const getAStarPath = ({
 
 const buildPath = (
   cameFrom: Map<ControlPoint, ControlPoint>,
-  current: ControlPoint
+  current: ControlPoint,
 ): ControlPoint[] => {
   const path = [current];
 

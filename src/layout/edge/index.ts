@@ -1,7 +1,7 @@
-import { EdgeLayout } from "../../data/types";
-import { kReactflow } from "../../states/reactflow";
-import { getControlPoints, GetControlPointsParams } from "./algorithms";
-import { getLabelPosition, getPathWithRoundCorners } from "./edge";
+import type { EdgeLayout } from '../../data/types';
+import { kReactflow } from '../../states/reactflow';
+import { type GetControlPointsParams, getControlPoints } from './algorithms';
+import { getLabelPosition, getPathWithRoundCorners } from './edge';
 
 interface GetBasePathParams extends GetControlPointsParams {
   borderRadius: number;
@@ -27,13 +27,13 @@ export function getBasePath({
     offset,
     borderRadius,
     source: {
-      id: "source-" + id,
+      id: 'source-' + id,
       x: sourceX,
       y: sourceY,
       position: sourcePosition,
     },
     target: {
-      id: "target-" + id,
+      id: 'target-' + id,
       x: targetX,
       y: targetY,
       position: targetPosition,

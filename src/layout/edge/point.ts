@@ -1,8 +1,8 @@
-import { Position } from "@xyflow/react";
+import { Position } from '@xyflow/react';
 
-import { uuid } from "@/utils/uuid";
+import { uuid } from '@/utils/uuid';
 
-import { isHorizontalFromPosition } from "./edge";
+import { isHorizontalFromPosition } from './edge';
 
 export interface ControlPoint {
   id: string;
@@ -102,7 +102,7 @@ export const isPointInRect = (p: ControlPoint, box: NodeRect) => {
  */
 export const getVerticesFromRectVertex = (
   box: NodeRect,
-  vertex: ControlPoint
+  vertex: ControlPoint,
 ): ControlPoint[] => {
   const points = [vertex, ...getRectVertices(box)];
   const { top, right, bottom, left } = getSidesFromPoints(points);
@@ -153,16 +153,16 @@ export const getRectVertices = (box: NodeRect) => {
 
 export const mergeRects = (...boxes: NodeRect[]): NodeRect => {
   const left = Math.min(
-    ...boxes.reduce((pre, e) => [...pre, e.x, e.x + e.width], [] as number[])
+    ...boxes.reduce((pre, e) => [...pre, e.x, e.x + e.width], [] as number[]),
   );
   const right = Math.max(
-    ...boxes.reduce((pre, e) => [...pre, e.x, e.x + e.width], [] as number[])
+    ...boxes.reduce((pre, e) => [...pre, e.x, e.x + e.width], [] as number[]),
   );
   const top = Math.min(
-    ...boxes.reduce((pre, e) => [...pre, e.y, e.y + e.height], [] as number[])
+    ...boxes.reduce((pre, e) => [...pre, e.y, e.y + e.height], [] as number[]),
   );
   const bottom = Math.max(
-    ...boxes.reduce((pre, e) => [...pre, e.y, e.y + e.height], [] as number[])
+    ...boxes.reduce((pre, e) => [...pre, e.y, e.y + e.height], [] as number[]),
   );
   return {
     x: left,
@@ -183,7 +183,7 @@ export const mergeRects = (...boxes: NodeRect[]): NodeRect => {
  */
 export const getOffsetPoint = (
   box: HandlePosition,
-  offset: number
+  offset: number,
 ): ControlPoint => {
   switch (box.position) {
     case Position.Top:
@@ -207,7 +207,7 @@ export const getOffsetPoint = (
 export const isInLine = (
   p: ControlPoint,
   p1: ControlPoint,
-  p2: ControlPoint
+  p2: ControlPoint,
 ) => {
   const xPoints = p1.x < p2.x ? [p1.x, p2.x] : [p2.x, p1.x];
   const yPoints = p1.y < p2.y ? [p1.y, p2.y] : [p2.y, p1.y];
@@ -223,7 +223,7 @@ export const isInLine = (
 export const isOnLine = (
   p: ControlPoint,
   p1: ControlPoint,
-  p2: ControlPoint
+  p2: ControlPoint,
 ) => {
   return (p1.x === p.x && p.x === p2.x) || (p1.y === p.y && p.y === p2.y);
 };
@@ -298,11 +298,11 @@ export function reducePoints(points: ControlPoint[]): ControlPoint[] {
  */
 export function mergeClosePoints(
   points: ControlPoint[],
-  threshold = 4
+  threshold = 4,
 ): ControlPoint[] {
   // Discrete coordinates
   const positions = { x: [] as number[], y: [] as number[] };
-  const findPosition = (axis: "x" | "y", v: number) => {
+  const findPosition = (axis: 'x' | 'y', v: number) => {
     // eslint-disable-next-line no-param-reassign
     v = Math.floor(v);
     const ps = positions[axis];
@@ -318,8 +318,8 @@ export function mergeClosePoints(
   const finalPoints = points.map((point) => {
     return {
       ...point,
-      x: findPosition("x", point.x),
-      y: findPosition("y", point.y),
+      x: findPosition('x', point.x),
+      y: findPosition('y', point.y),
     };
   });
 
@@ -357,7 +357,7 @@ const isSegmentsIntersected = (
   p0: ControlPoint,
   p1: ControlPoint,
   p2: ControlPoint,
-  p3: ControlPoint
+  p3: ControlPoint,
 ): boolean => {
   const s1x = p1.x - p0.x;
   const s1y = p1.y - p0.y;
@@ -382,7 +382,7 @@ const isSegmentsIntersected = (
 export const isSegmentCrossingRect = (
   p1: ControlPoint,
   p2: ControlPoint,
-  box: NodeRect
+  box: NodeRect,
 ): boolean => {
   if (box.width === 0 && box.height === 0) {
     return false;

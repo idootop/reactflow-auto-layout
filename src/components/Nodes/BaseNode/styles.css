@@ -1,20 +1,20 @@
 .react-flow__node-base {
   background: #f8f8f8;
-  border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 50%);
+  border-radius: 4px;
 }
 
 .react-flow__handle {
   position: relative;
-  transform: none;
   top: auto;
   left: auto;
+  transform: none;
 }
 
 .handle {
-  background: #224466;
   width: 8px;
   height: 8px;
+  background: #224466;
 }
 
 .handle-horizontal {
@@ -38,8 +38,8 @@
 }
 
 .handles {
-  display: flex;
   position: absolute;
+  display: flex;
   justify-content: space-around;
 }
 
@@ -54,13 +54,13 @@
 }
 
 .handles-horizontal.targets {
-  left: -4px;
   top: 0px;
+  left: -4px;
 }
 
 .handles-horizontal.sources {
-  right: -2px;
   top: 0px;
+  right: -2px;
 }
 
 .handles-vertical.targets {

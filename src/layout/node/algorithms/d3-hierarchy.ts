@@ -1,11 +1,12 @@
 // Based on: https://github.com/flanksource/flanksource-ui/blob/75b35591d3bbc7d446fa326d0ca7536790f38d88/src/ui/Graphs/Layouts/algorithms/d3-hierarchy.ts
 
-import { stratify, tree, type HierarchyPointNode } from "d3-hierarchy";
-import { getIncomers, type Node } from "@xyflow/react";
+import { getIncomers, type Node } from '@xyflow/react';
+import { type HierarchyPointNode, stratify, tree } from 'd3-hierarchy';
 
-import { ReactflowNodeWithData } from "@/data/types";
-import { LayoutAlgorithm } from "..";
-import { getEdgeLayouted, getNodeLayouted, getNodeSize } from "../../metadata";
+import type { ReactflowNodeWithData } from '@/data/types';
+
+import { getEdgeLayouted, getNodeLayouted, getNodeSize } from '../../metadata';
+import type { LayoutAlgorithm } from '..';
 
 type NodeWithPosition = ReactflowNodeWithData & { x: number; y: number };
 
@@ -14,7 +15,7 @@ const layout = tree<NodeWithPosition>().separation(() => 1);
 // Since d3-hierarchy layout algorithm does not support multiple root nodes,
 // we attach the sub-workflows to the global rootNode.
 const rootNode: NodeWithPosition = {
-  id: "#root",
+  id: '#root',
   x: 0,
   y: 0,
   position: { x: 0, y: 0 },
@@ -23,7 +24,7 @@ const rootNode: NodeWithPosition = {
 
 export const layoutD3Hierarchy: LayoutAlgorithm = async (props) => {
   const { nodes, edges, direction, visibility, spacing } = props;
-  const isHorizontal = direction === "horizontal";
+  const isHorizontal = direction === 'horizontal';
 
   const initialNodes = [] as NodeWithPosition[];
   let maxNodeWidth = 0;
@@ -78,7 +79,7 @@ export const layoutD3Hierarchy: LayoutAlgorithm = async (props) => {
         direction,
         visibility,
         fixPosition: ({ x, y, width, height }) => {
-          // This algorithm uses the center coordinate of the node as the reference point, 
+          // This algorithm uses the center coordinate of the node as the reference point,
           // which needs adjustment for ReactFlow's topLeft coordinate system.
           return {
             x: x - width / 2,

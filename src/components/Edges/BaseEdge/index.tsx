@@ -1,12 +1,13 @@
-import { ComponentType, memo } from "react";
-import { EdgeProps, BaseEdge as _BaseEdge } from "@xyflow/react";
+import { BaseEdge as _BaseEdge, type EdgeProps } from '@xyflow/react';
+import { type ComponentType, memo } from 'react';
 
-import { ReactflowEdgeWithData } from "@/data/types";
-import { isConnectionBackward } from "@/layout/edge/edge";
-import { getEdgeStyles, layoutEdge } from "@/layout/edge/style";
-import { kReactflow } from "@/states/reactflow";
-import { EdgeControllers } from "../EdgeController";
-import { useRebuildEdge } from "./useRebuildEdge";
+import type { ReactflowEdgeWithData } from '@/data/types';
+import { isConnectionBackward } from '@/layout/edge/edge';
+import { getEdgeStyles, layoutEdge } from '@/layout/edge/style';
+import { kReactflow } from '@/states/reactflow';
+
+import { EdgeControllers } from '../EdgeController';
+import { useRebuildEdge } from './useRebuildEdge';
 
 export const BaseEdge: ComponentType<
   EdgeProps & {
@@ -82,40 +83,40 @@ export const BaseEdge: ComponentType<
     return (
       <>
         <_BaseEdge
-          path={path}
+          interactionWidth={interactionWidth}
+          label={label}
+          labelBgBorderRadius={labelBgBorderRadius}
+          labelBgPadding={labelBgPadding}
+          labelBgStyle={labelBgStyle}
+          labelShowBg={labelShowBg}
+          labelStyle={labelStyle}
           labelX={labelPosition.x}
           labelY={labelPosition.y}
-          label={label}
-          labelStyle={labelStyle}
-          labelShowBg={labelShowBg}
-          labelBgStyle={labelBgStyle}
-          labelBgPadding={labelBgPadding}
-          labelBgBorderRadius={labelBgBorderRadius}
+          markerEnd={`url('#${color.replace('#', '')}')`}
+          markerStart={markerStart}
+          path={path}
           style={{
             ...style,
             stroke: color,
             opacity: selected ? 1 : 0.5,
             strokeWidth: selected ? 2 : 1.5,
-            strokeDasharray: edgeType === "dashed" ? "10,10" : undefined,
+            strokeDasharray: edgeType === 'dashed' ? '10,10' : undefined,
           }}
-          markerEnd={`url('#${color.replace("#", "")}')`}
-          markerStart={markerStart}
-          interactionWidth={interactionWidth}
         />
         {selected && (
           <EdgeControllers
+            handlerThickness={handlerThickness}
+            handlerWidth={handlerWidth}
             id={id}
+            offset={offset}
             points={points}
             sourcePosition={sourcePosition}
             targetPosition={targetPosition}
-            offset={offset}
-            handlerWidth={handlerWidth}
-            handlerThickness={handlerThickness}
           />
         )}
       </>
     );
-  }
+  },
 );
 
-BaseEdge.displayName = "BaseEdge";
+BaseEdge.displayName = 'BaseEdge';

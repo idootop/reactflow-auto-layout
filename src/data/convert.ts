@@ -1,5 +1,6 @@
-import { lastOf } from "@/utils/base";
-import { Reactflow, Workflow } from "./types";
+import { lastOf } from '@/utils/base';
+
+import type { Reactflow, Workflow } from './types';
 
 export const workflow2reactflow = (workflow: Workflow): Reactflow => {
   const { nodes = [], edges = [] } = workflow ?? {};
@@ -72,14 +73,14 @@ export const workflow2reactflow = (workflow: Workflow): Reactflow => {
       data: {
         sourcePort: {
           edges: edgesCount[`source-${edge.source}`],
-          portIndex: parseInt(lastOf(edge.sourceHandle.split("#"))!, 10),
+          portIndex: parseInt(lastOf(edge.sourceHandle.split('#'))!, 10),
           portCount: Object.keys(nodeHandles[edge.source].sourceHandles).length,
           edgeIndex: edgesIndex[edge.id].source,
           edgeCount: edgesCount[edge.sourceHandle],
         },
         targetPort: {
           edges: edgesCount[`target-${edge.target}`],
-          portIndex: parseInt(lastOf(edge.targetHandle.split("#"))!, 10),
+          portIndex: parseInt(lastOf(edge.targetHandle.split('#'))!, 10),
           portCount: Object.keys(nodeHandles[edge.target].targetHandles).length,
           edgeIndex: edgesIndex[edge.id].target,
           edgeCount: edgesCount[edge.targetHandle],

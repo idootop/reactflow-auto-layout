@@ -1,22 +1,23 @@
-import { deepClone, lastOf } from "@/utils/base";
-import { Position, getBezierPath } from "@xyflow/react";
+import { getBezierPath, type Position } from '@xyflow/react';
 
-import { getBasePath } from ".";
+import { deepClone, lastOf } from '@/utils/base';
+
 import {
   kBaseMarkerColor,
   kBaseMarkerColors,
   kNoMarkerColor,
   kYesMarkerColor,
-} from "../../components/Edges/Marker";
-import { isEqual } from "../../utils/diff";
-import { EdgeLayout, ReactflowEdgeWithData } from "../../data/types";
-import { kReactflow } from "../../states/reactflow";
-import { getPathWithRoundCorners } from "./edge";
+} from '../../components/Edges/Marker';
+import type { EdgeLayout, ReactflowEdgeWithData } from '../../data/types';
+import { kReactflow } from '../../states/reactflow';
+import { isEqual } from '../../utils/diff';
+import { getBasePath } from '.';
+import { getPathWithRoundCorners } from './edge';
 
 interface EdgeStyle {
   color: string;
-  edgeType: "solid" | "dashed";
-  pathType: "base" | "bezier";
+  edgeType: 'solid' | 'dashed';
+  pathType: 'base' | 'bezier';
 }
 
 /**
@@ -31,29 +32,29 @@ export const getEdgeStyles = (props: {
   isBackward: boolean;
 }): EdgeStyle => {
   const { id, isBackward } = props;
-  const idx = parseInt(lastOf(id.split("#")) ?? "0", 10);
+  const idx = parseInt(lastOf(id.split('#')) ?? '0', 10);
   if (isBackward) {
     // Use dashed lines to distinguish the edges when the connection line goes backward or connects to a hub Node
-    return { color: kNoMarkerColor, edgeType: "dashed", pathType: "base" };
+    return { color: kNoMarkerColor, edgeType: 'dashed', pathType: 'base' };
   }
   const edge = kReactflow.instance!.getEdge(id)! as ReactflowEdgeWithData;
   if (edge.data!.targetPort.edges > 2) {
     // Use dashed bezier path when the connection line connects to a hub Node
     return {
       color: kYesMarkerColor,
-      edgeType: "dashed",
-      pathType: "bezier",
+      edgeType: 'dashed',
+      pathType: 'bezier',
     };
   }
   if (edge.data!.sourcePort.edges > 2) {
     // Use multiple colors to distinguish the edges when there are more than 3 edges connecting to both ends of the Node
     return {
       color: kBaseMarkerColors[idx % kBaseMarkerColors.length],
-      edgeType: "solid",
-      pathType: "base",
+      edgeType: 'solid',
+      pathType: 'base',
     };
   }
-  return { color: kBaseMarkerColor, edgeType: "solid", pathType: "base" };
+  return { color: kBaseMarkerColor, edgeType: 'solid', pathType: 'base' };
 };
 
 interface ILayoutEdge {
@@ -61,7 +62,7 @@ interface ILayoutEdge {
   layout?: EdgeLayout;
   offset: number;
   borderRadius: number;
-  pathType: EdgeStyle["pathType"];
+  pathType: EdgeStyle['pathType'];
   source: string;
   target: string;
   sourceX: number;
@@ -92,7 +93,7 @@ export function layoutEdge({
   const reBuildPathDeps = layout?.points;
   const needReBuildPath = !isEqual(
     reBuildPathDeps,
-    layout?.deps?.reBuildPathDeps
+    layout?.deps?.reBuildPathDeps,
   );
   let newLayout = layout;
   if (needRelayout) {
@@ -146,8 +147,8 @@ function _layoutEdge({
   sourcePosition,
   targetPosition,
 }: ILayoutEdge): EdgeLayout {
-  const _pathType: EdgeStyle["pathType"] = pathType;
-  if (_pathType === "bezier") {
+  const _pathType: EdgeStyle['pathType'] = pathType;
+  if (_pathType === 'bezier') {
     const [path, labelX, labelY] = getBezierPath({
       sourceX,
       sourceY,
@@ -158,12 +159,12 @@ function _layoutEdge({
     });
     const points = [
       {
-        id: "source-" + id,
+        id: 'source-' + id,
         x: sourceX,
         y: sourceY,
       },
       {
-        id: "target-" + id,
+        id: 'target-' + id,
         x: targetX,
         y: targetY,
       },

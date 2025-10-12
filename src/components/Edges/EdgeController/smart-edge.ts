@@ -1,21 +1,21 @@
-import { uuid } from "@/utils/uuid";
-
-import { ReactflowEdgeWithData } from "@/data/types";
+import type { ReactflowEdgeWithData } from '@/data/types';
 import {
   areLinesReverseDirection,
   distance,
-  ILine,
+  type ILine,
   isHorizontalFromPosition,
   isLineContainsPoint,
-} from "@/layout/edge/edge";
+} from '@/layout/edge/edge';
 import {
-  ControlPoint,
+  type ControlPoint,
   getOffsetPoint,
   reducePoints,
-} from "@/layout/edge/point";
-import { kReactflow } from "@/states/reactflow";
-import { EdgeControllersParams } from ".";
-import { rebuildEdge } from "../BaseEdge/useRebuildEdge";
+} from '@/layout/edge/point';
+import { kReactflow } from '@/states/reactflow';
+import { uuid } from '@/utils/uuid';
+
+import { rebuildEdge } from '../BaseEdge/useRebuildEdge';
+import type { EdgeControllersParams } from '.';
 
 interface EdgeContext extends EdgeControllersParams {
   source: ControlPoint;
@@ -30,11 +30,11 @@ export const getEdgeContext = (props: EdgeControllersParams): EdgeContext => {
   const target = points[points.length - 1];
   const sourceOffset = getOffsetPoint(
     { ...source, position: sourcePosition },
-    offset
+    offset,
   );
   const targetOffset = getOffsetPoint(
     { ...target, position: targetPosition },
-    offset
+    offset,
   );
   return { ...props, source, target, sourceOffset, targetOffset };
 };
@@ -138,7 +138,7 @@ export class SmartEdge {
     dragId: string,
     from: ILine,
     _to: ILine,
-    minGap = 10
+    minGap = 10,
   ): ControlPoint[] | undefined {
     const startPoints = this.ctx.points.slice(0, this.idx + 1);
     const endPoints = this.ctx.points.slice(this.idx + 1);
@@ -271,7 +271,7 @@ export class SmartEdge {
     dragId: string,
     from: ILine,
     to: ILine,
-    minGap = 10
+    minGap = 10,
   ): ControlPoint[] | undefined {
     const startPoints = this.previous
       ? this.ctx.points.slice(0, this.previous.idx)
@@ -496,7 +496,7 @@ export class SmartEdge {
       !isLineContainsPoint(
         edges[0].start,
         edges[0].end,
-        this.ctx.sourceOffset
+        this.ctx.sourceOffset,
       ) ||
       !isLineContainsPoint(edges[3].start, edges[3].end, this.ctx.targetOffset)
     ) {
@@ -508,13 +508,13 @@ export class SmartEdge {
         edges[0].start,
         edges[0].end,
         edges[1].start,
-        edges[1].end
+        edges[1].end,
       ) ||
       areLinesReverseDirection(
         edges[2].start,
         edges[2].end,
         edges[3].start,
-        edges[3].end
+        edges[3].end,
       )
     ) {
       return false;
@@ -524,7 +524,7 @@ export class SmartEdge {
 
   rebuildEdge = (points: ControlPoint[]) => {
     const edge = kReactflow.instance!.getEdge(
-      this.ctx.id
+      this.ctx.id,
     )! as ReactflowEdgeWithData;
     edge.data!.layout!.points = reducePoints(points);
     rebuildEdge(this.ctx.id);

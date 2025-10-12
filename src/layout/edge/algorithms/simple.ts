@@ -1,7 +1,7 @@
-import { uuid } from "@/utils/uuid";
+import { uuid } from '@/utils/uuid';
 
-import { LayoutDirection } from "../../node";
-import { ControlPoint, isInLine, isOnLine } from "../point";
+import type { LayoutDirection } from '../../node';
+import { type ControlPoint, isInLine, isOnLine } from '../point';
 
 interface GetSimplePathParams {
   isDirectConnect?: boolean;
@@ -13,12 +13,12 @@ interface GetSimplePathParams {
 
 const getLineDirection = (
   start: ControlPoint,
-  end: ControlPoint
-): LayoutDirection => (start.x === end.x ? "vertical" : "horizontal");
+  end: ControlPoint,
+): LayoutDirection => (start.x === end.x ? 'vertical' : 'horizontal');
 
 /**
  * When two nodes are too close, use the simple path
- * 
+ *
  * @returns Control points including sourceOffset and targetOffset (not including source and target points).
  */
 export const getSimplePath = ({
@@ -31,7 +31,7 @@ export const getSimplePath = ({
   const points: ControlPoint[] = [];
   const sourceDirection = getLineDirection(source, sourceOffset);
   const targetDirection = getLineDirection(target, targetOffset);
-  const isHorizontalLayout = sourceDirection === "horizontal";
+  const isHorizontalLayout = sourceDirection === 'horizontal';
   if (isDirectConnect) {
     // Direct connection, return a simple Path
     if (isHorizontalLayout) {

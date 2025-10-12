@@ -3,7 +3,7 @@
 // Source: https://github.com/AsyncBanana/microdiff
 
 interface Difference {
-  type: "CREATE" | "REMOVE" | "CHANGE";
+  type: 'CREATE' | 'REMOVE' | 'CHANGE';
   path: (string | number)[];
   value?: any;
 }
@@ -20,7 +20,7 @@ export function isEqual(oldObj: any, newObj: any): boolean {
       {
         obj: oldObj,
       },
-      { obj: newObj }
+      { obj: newObj },
     ).length < 1
   );
 }
@@ -32,7 +32,7 @@ function diff(
   obj: Record<string, any> | any[],
   newObj: Record<string, any> | any[],
   options: Partial<Options> = { cyclesFix: true },
-  _stack: Record<string, any>[] = []
+  _stack: Record<string, any>[] = [],
 ): Difference[] {
   const diffs: Difference[] = [];
   const isObjArray = Array.isArray(obj);
@@ -42,14 +42,14 @@ function diff(
     const path = isObjArray ? Number(key) : key;
     if (!(key in newObj)) {
       diffs.push({
-        type: "REMOVE",
+        type: 'REMOVE',
         path: [path],
       });
       continue;
     }
     const newObjKey = newObj[key];
     const areObjects =
-      typeof objKey === "object" && typeof newObjKey === "object";
+      typeof objKey === 'object' && typeof newObjKey === 'object';
     if (
       objKey &&
       newObjKey &&
@@ -61,7 +61,7 @@ function diff(
         objKey,
         newObjKey,
         options,
-        options.cyclesFix ? _stack.concat([objKey]) : []
+        options.cyclesFix ? _stack.concat([objKey]) : [],
       );
       // eslint-disable-next-line prefer-spread
       diffs.push.apply(
@@ -70,7 +70,7 @@ function diff(
           difference.path.unshift(path);
 
           return difference;
-        })
+        }),
       );
     } else if (
       objKey !== newObjKey &&
@@ -83,7 +83,7 @@ function diff(
     ) {
       diffs.push({
         path: [path],
-        type: "CHANGE",
+        type: 'CHANGE',
         value: newObjKey,
       });
     }
@@ -94,7 +94,7 @@ function diff(
   for (const key in newObj) {
     if (!(key in obj)) {
       diffs.push({
-        type: "CREATE",
+        type: 'CREATE',
         path: [isNewObjArray ? Number(key) : key],
         value: newObj[key],
       });

@@ -1,5 +1,5 @@
-import { LayoutAlgorithm } from "..";
-import { getEdgeLayouted, getNodeLayouted } from "../../metadata";
+import { getEdgeLayouted, getNodeLayouted } from '../../metadata';
+import type { LayoutAlgorithm } from '..';
 
 /**
  * Positions all nodes at the origin (0,0) in the layout.

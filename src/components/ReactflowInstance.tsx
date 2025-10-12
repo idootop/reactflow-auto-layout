@@ -1,6 +1,6 @@
-import { useReactFlow, useStoreApi } from "@xyflow/react";
+import { useReactFlow, useStoreApi } from '@xyflow/react';
 
-import { kReactflow } from "../states/reactflow";
+import { kReactflow } from '../states/reactflow';
 
 // Used to mount onto the ReactFlow component to get the corresponding ReactFlowInstance
 export const ReactflowInstance = (): any => {

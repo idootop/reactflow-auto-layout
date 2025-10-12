@@ -1,4 +1,4 @@
-import { EdgeTypes } from '@xyflow/react';
+import type { EdgeTypes } from '@xyflow/react';
 
 import { BaseEdge } from './BaseEdge';
 

@@ -6,6 +6,6 @@ export function uuid(): string {
   uuid[14] = 4;
   uuid[19] = uuid[19] &= ~(1 << 2);
   uuid[19] = uuid[19] |= 1 << 3;
-  uuid[8] = uuid[13] = uuid[18] = uuid[23] = "-";
-  return uuid.map((x) => x.toString(16)).join("");
+  uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+  return uuid.map((x) => x.toString(16)).join('');
 }

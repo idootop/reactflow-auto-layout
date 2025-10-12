@@ -1,22 +1,23 @@
-import dagre from "@dagrejs/dagre";
-import { getIncomers } from "@xyflow/react";
+import dagre from '@dagrejs/dagre';
+import { getIncomers } from '@xyflow/react';
 
-import { ReactflowNodeWithData } from "@/data/types";
-import { LayoutAlgorithm } from "..";
-import { getEdgeLayouted, getNodeLayouted, getNodeSize } from "../../metadata";
+import type { ReactflowNodeWithData } from '@/data/types';
+
+import { getEdgeLayouted, getNodeLayouted, getNodeSize } from '../../metadata';
+import type { LayoutAlgorithm } from '..';
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 export const layoutDagreTree: LayoutAlgorithm = async (props) => {
   const { nodes, edges, direction, visibility, spacing } = props;
-  const isHorizontal = direction === "horizontal";
+  const isHorizontal = direction === 'horizontal';
 
   dagreGraph.setGraph({
     nodesep: isHorizontal ? spacing.y : spacing.x,
     ranksep: isHorizontal ? spacing.x : spacing.y,
-    ranker: "tight-tree",
-    rankdir: isHorizontal ? "LR" : "TB",
+    ranker: 'tight-tree',
+    rankdir: isHorizontal ? 'LR' : 'TB',
   });
 
   const subWorkflowRootNodes: ReactflowNodeWithData[] = [];
@@ -36,9 +37,9 @@ export const layoutDagreTree: LayoutAlgorithm = async (props) => {
   edges.forEach((edge) => dagreGraph.setEdge(edge.source, edge.target));
 
   // Connect sub-workflows' root nodes to the rootNode
-  dagreGraph.setNode("#root", { width: 1, height: 1 });
+  dagreGraph.setNode('#root', { width: 1, height: 1 });
   for (const subWorkflowRootNode of subWorkflowRootNodes) {
-    dagreGraph.setEdge("#root", subWorkflowRootNode.id);
+    dagreGraph.setEdge('#root', subWorkflowRootNode.id);
   }
 
   dagre.layout(dagreGraph);

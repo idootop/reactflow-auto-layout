@@ -11,11 +11,11 @@ export const nextTick = async (frames = 1) => {
   }
 };
 
-export const firstOf = <T = any>(datas?: T[]) =>
-  datas ? (datas.length < 1 ? undefined : datas[0]) : undefined;
+export const firstOf = <T = any>(items?: T[]) =>
+  items ? (items.length < 1 ? undefined : items[0]) : undefined;
 
-export const lastOf = <T = any>(datas?: T[]) =>
-  datas ? (datas.length < 1 ? undefined : datas[datas.length - 1]) : undefined;
+export const lastOf = <T = any>(items?: T[]) =>
+  items ? (items.length < 1 ? undefined : items[items.length - 1]) : undefined;
 
 export const randomInt = (min: number, max?: number) => {
   if (!max) {
@@ -25,8 +25,8 @@ export const randomInt = (min: number, max?: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-export const pickOne = <T = any>(datas: T[]) =>
-  datas.length < 1 ? undefined : datas[randomInt(datas.length - 1)];
+export const pickOne = <T = any>(items: T[]) =>
+  items.length < 1 ? undefined : items[randomInt(items.length - 1)];
 
 export const range = (start: number, end?: number) => {
   if (!end) {
@@ -43,11 +43,11 @@ export function clamp(num: number, min: number, max: number): number {
   return num < max ? (num > min ? num : min) : max;
 }
 
-export const toSet = <T = any>(datas: T[], byKey?: (e: T) => any) => {
+export const toSet = <T = any>(items: T[], byKey?: (e: T) => any) => {
   if (byKey) {
     const keys: Record<string, boolean> = {};
     const newDatas: T[] = [];
-    datas.forEach((e) => {
+    items.forEach((e) => {
       const key = jsonEncode({ key: byKey(e) }) as any;
       if (!keys[key]) {
         newDatas.push(e);
@@ -56,13 +56,13 @@ export const toSet = <T = any>(datas: T[], byKey?: (e: T) => any) => {
     });
     return newDatas;
   }
-  return Array.from(new Set(datas));
+  return Array.from(new Set(items));
 };
 
 export function jsonEncode(obj: any, prettier = false) {
   try {
     return prettier ? JSON.stringify(obj, undefined, 4) : JSON.stringify(obj);
-  } catch (error) {
+  } catch {
     return undefined;
   }
 }
@@ -71,7 +71,7 @@ export function jsonDecode(json: string | undefined) {
   if (json == undefined) return undefined;
   try {
     return JSON.parse(json!);
-  } catch (error) {
+  } catch {
     return undefined;
   }
 }
@@ -90,7 +90,7 @@ export function removeEmpty<T = any>(data: T): T {
 }
 
 export const deepClone = <T>(obj: T): T => {
-  if (obj === null || typeof obj !== "object") {
+  if (obj === null || typeof obj !== 'object') {
     return obj;
   }
 
@@ -106,7 +106,7 @@ export const deepClone = <T>(obj: T): T => {
   const copy = {} as T;
 
   for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+    if (Object.hasOwn(obj, key)) {
       (copy as any)[key] = deepClone((obj as any)[key]);
     }
   }

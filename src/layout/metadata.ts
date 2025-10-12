@@ -1,19 +1,19 @@
-import { MarkerType, Position } from "@xyflow/react";
+import { MarkerType, Position } from '@xyflow/react';
 
-import {
+import type {
   Reactflow,
   ReactflowEdgeWithData,
   ReactflowNodeWithData,
-} from "../data/types";
-import { LayoutDirection, LayoutVisibility } from "./node";
+} from '../data/types';
+import type { LayoutDirection, LayoutVisibility } from './node';
 
-export const getRootNode = (nodes: Reactflow["nodes"]) => {
-  return nodes.find((e) => e.type === "start") ?? nodes[0];
+export const getRootNode = (nodes: Reactflow['nodes']) => {
+  return nodes.find((e) => e.type === 'start') ?? nodes[0];
 };
 
 export const getNodeSize = (
   node: ReactflowNodeWithData,
-  defaultSize = { width: 150, height: 36 }
+  defaultSize = { width: 150, height: 36 },
 ) => {
   const nodeWith = node.measured?.width;
   const nodeHeight = node.measured?.height;
@@ -53,14 +53,14 @@ export const getNodeLayouted = (props: {
     fixPosition = (p) => ({ x: p.x, y: p.y }),
   } = props;
 
-  const hidden = visibility !== "visible";
-  const isHorizontal = direction === "horizontal";
+  const hidden = visibility !== 'visible';
+  const isHorizontal = direction === 'horizontal';
   const { width, height, widthWithDefault, heightWithDefault } =
     getNodeSize(node);
 
   return {
     ...node,
-    type: "base",
+    type: 'base',
     width,
     height,
     position: fixPosition({
@@ -74,7 +74,7 @@ export const getNodeLayouted = (props: {
     },
     style: {
       ...node.style,
-      visibility: hidden ? "hidden" : "visible",
+      visibility: hidden ? 'hidden' : 'visible',
     },
     targetPosition: isHorizontal ? Position.Left : Position.Top,
     sourcePosition: isHorizontal ? Position.Right : Position.Bottom,
@@ -86,16 +86,16 @@ export const getEdgeLayouted = (props: {
   visibility: LayoutVisibility;
 }): ReactflowEdgeWithData => {
   const { edge, visibility } = props;
-  const hidden = visibility !== "visible";
+  const hidden = visibility !== 'visible';
   return {
     ...edge,
-    type: "base",
+    type: 'base',
     markerEnd: {
       type: MarkerType.ArrowClosed,
     },
     style: {
       ...edge.style,
-      visibility: hidden ? "hidden" : "visible",
+      visibility: hidden ? 'hidden' : 'visible',
     },
   };
 };

@@ -1,18 +1,18 @@
-import { areLinesSameDirection, isHorizontalFromPosition } from "../edge";
+import { areLinesSameDirection, isHorizontalFromPosition } from '../edge';
 import {
-  ControlPoint,
-  HandlePosition,
-  NodeRect,
+  type ControlPoint,
   getCenterPoints,
   getExpandedRect,
   getOffsetPoint,
   getSidesFromPoints,
   getVerticesFromRectVertex,
+  type HandlePosition,
+  type NodeRect,
   optimizeInputPoints,
   reducePoints,
-} from "../point";
-import { getAStarPath } from "./a-star";
-import { getSimplePath } from "./simple";
+} from '../point';
+import { getAStarPath } from './a-star';
+import { getSimplePath } from './simple';
 
 export interface GetControlPointsParams {
   source: HandlePosition;
@@ -55,7 +55,7 @@ export const getControlPoints = ({
     source,
     sourceOffset,
     targetOffset,
-    target
+    target,
   );
   const sides = getSidesFromPoints([
     source,
@@ -100,7 +100,7 @@ export const getControlPoints = ({
         target: expandedTarget,
         sourceOffset,
         targetOffset,
-      })
+      }),
     );
     // 5. Merge nearby coordinate points and remove duplicate coordinate points
     optimized = optimizeInputPoints({

@@ -1,14 +1,17 @@
-import { removeEmpty } from "@/utils/base";
+import { removeEmpty } from '@/utils/base';
 
-import { Reactflow } from "../../data/types";
-import { D3DAGLayoutAlgorithms, kD3DAGAlgorithms } from "./algorithms/d3-dag";
-import { layoutD3Hierarchy } from "./algorithms/d3-hierarchy";
-import { layoutDagreTree } from "./algorithms/dagre-tree";
-import { ELKLayoutAlgorithms, kElkAlgorithms } from "./algorithms/elk";
-import { layoutOrigin } from "./algorithms/origin";
+import type { Reactflow } from '../../data/types';
+import {
+  type D3DAGLayoutAlgorithms,
+  kD3DAGAlgorithms,
+} from './algorithms/d3-dag';
+import { layoutD3Hierarchy } from './algorithms/d3-hierarchy';
+import { layoutDagreTree } from './algorithms/dagre-tree';
+import { type ELKLayoutAlgorithms, kElkAlgorithms } from './algorithms/elk';
+import { layoutOrigin } from './algorithms/origin';
 
-export type LayoutDirection = "vertical" | "horizontal";
-export type LayoutVisibility = "visible" | "hidden";
+export type LayoutDirection = 'vertical' | 'horizontal';
+export type LayoutVisibility = 'visible' | 'hidden';
 export interface LayoutSpacing {
   x: number;
   y: number;
@@ -20,7 +23,7 @@ export type ReactflowLayoutConfig = {
   spacing: LayoutSpacing;
   /**
    * Whether to hide the layout
-   * 
+   *
    * We may need to hide layout if node sizes are not available during the first layout.
    */
   visibility: LayoutVisibility;
@@ -31,39 +34,39 @@ export type ReactflowLayoutConfig = {
 };
 
 export type LayoutAlgorithmProps = Reactflow &
-  Omit<ReactflowLayoutConfig, "algorithm">;
+  Omit<ReactflowLayoutConfig, 'algorithm'>;
 
 export type LayoutAlgorithm = (
-  props: LayoutAlgorithmProps
+  props: LayoutAlgorithmProps,
 ) => Promise<Reactflow | undefined>;
 
 export const kLayoutAlgorithms: Record<string, LayoutAlgorithm> = {
   origin: layoutOrigin,
-  "dagre-tree": layoutDagreTree,
-  "d3-hierarchy": layoutD3Hierarchy,
+  'dagre-tree': layoutDagreTree,
+  'd3-hierarchy': layoutD3Hierarchy,
   ...kElkAlgorithms,
   ...kD3DAGAlgorithms,
 };
 
 export const kDefaultLayoutConfig: ReactflowLayoutConfig = {
-  algorithm: "elk-mr-tree",
-  direction: "vertical",
-  visibility: "visible",
+  algorithm: 'elk-mr-tree',
+  direction: 'vertical',
+  visibility: 'visible',
   spacing: { x: 120, y: 120 },
   reverseSourceHandles: false,
 };
 
 export type LayoutAlgorithms =
-  | "origin"
-  | "dagre-tree"
-  | "d3-hierarchy"
+  | 'origin'
+  | 'dagre-tree'
+  | 'd3-hierarchy'
   | ELKLayoutAlgorithms
   | D3DAGLayoutAlgorithms;
 
 export type ILayoutReactflow = Reactflow & Partial<ReactflowLayoutConfig>;
 
 export const layoutReactflow = async (
-  options: ILayoutReactflow
+  options: ILayoutReactflow,
 ): Promise<Reactflow> => {
   const config = { ...kDefaultLayoutConfig, ...removeEmpty(options) };
   const { nodes = [], edges = [] } = config;
@@ -75,7 +78,7 @@ export const layoutReactflow = async (
       ...config,
       nodes,
       edges,
-      algorithm: "origin",
+      algorithm: 'origin',
     });
   }
   return result!;

@@ -1,21 +1,22 @@
-import ELK from "elkjs/lib/elk.bundled.js";
-import { getIncomers } from "@xyflow/react";
+import { getIncomers } from '@xyflow/react';
+import ELK from 'elkjs/lib/elk.bundled.js';
 
-import { ReactflowNodeWithData } from "@/data/types";
-import { LayoutAlgorithm, LayoutAlgorithmProps } from "..";
-import { getEdgeLayouted, getNodeLayouted, getNodeSize } from "../../metadata";
+import type { ReactflowNodeWithData } from '@/data/types';
+
+import { getEdgeLayouted, getNodeLayouted, getNodeSize } from '../../metadata';
+import type { LayoutAlgorithm, LayoutAlgorithmProps } from '..';
 
 const algorithms = {
-  "elk-layered": "layered",
-  "elk-mr-tree": "mrtree",
+  'elk-layered': 'layered',
+  'elk-mr-tree': 'mrtree',
 };
 
 const elk = new ELK({ algorithms: Object.values(algorithms) });
 
-export type ELKLayoutAlgorithms = "elk-layered" | "elk-mr-tree";
+export type ELKLayoutAlgorithms = 'elk-layered' | 'elk-mr-tree';
 
 export const layoutELK = async (
-  props: LayoutAlgorithmProps & { algorithm?: ELKLayoutAlgorithms }
+  props: LayoutAlgorithmProps & { algorithm?: ELKLayoutAlgorithms },
 ) => {
   const {
     nodes,
@@ -23,9 +24,9 @@ export const layoutELK = async (
     direction,
     visibility,
     spacing,
-    algorithm = "elk-mr-tree",
+    algorithm = 'elk-mr-tree',
   } = props;
-  const isHorizontal = direction === "horizontal";
+  const isHorizontal = direction === 'horizontal';
 
   const subWorkflowRootNodes: ReactflowNodeWithData[] = [];
   const layoutNodes = nodes.map((node) => {
@@ -38,13 +39,13 @@ export const layoutELK = async (
     const sourcePorts = node.data.sourceHandles.map((id) => ({
       id,
       properties: {
-        side: isHorizontal ? "EAST" : "SOUTH",
+        side: isHorizontal ? 'EAST' : 'SOUTH',
       },
     }));
     const targetPorts = node.data.targetHandles.map((id) => ({
       id,
       properties: {
-        side: isHorizontal ? "WEST" : "NORTH",
+        side: isHorizontal ? 'WEST' : 'NORTH',
       },
     }));
     return {
@@ -53,7 +54,7 @@ export const layoutELK = async (
       height: heightWithDefault,
       ports: [...targetPorts, ...sourcePorts],
       properties: {
-        "org.eclipse.elk.portConstraints": "FIXED_ORDER",
+        'org.eclipse.elk.portConstraints': 'FIXED_ORDER',
       },
     };
   });
@@ -67,7 +68,7 @@ export const layoutELK = async (
   });
 
   // Connect sub-workflows' root nodes to the rootNode
-  const rootNode: any = { id: "#root", width: 1, height: 1 };
+  const rootNode: any = { id: '#root', width: 1, height: 1 };
   layoutNodes.push(rootNode);
   for (const subWorkflowRootNode of subWorkflowRootNodes) {
     layoutEdges.push({
@@ -79,37 +80,40 @@ export const layoutELK = async (
 
   const layouted = await elk
     .layout({
-      id: "@root",
+      id: '@root',
       children: layoutNodes,
       edges: layoutEdges,
       layoutOptions: {
         // - https://www.eclipse.org/elk/reference/algorithms.html
-        "elk.algorithm": algorithms[algorithm],
-        "elk.direction": isHorizontal ? "RIGHT" : "DOWN",
+        'elk.algorithm': algorithms[algorithm],
+        'elk.direction': isHorizontal ? 'RIGHT' : 'DOWN',
         // - https://www.eclipse.org/elk/reference/options.html
-        "elk.spacing.nodeNode": isHorizontal
+        'elk.spacing.nodeNode': isHorizontal
           ? spacing.y.toString()
           : spacing.x.toString(),
-        "elk.layered.spacing.nodeNodeBetweenLayers": isHorizontal
+        'elk.layered.spacing.nodeNodeBetweenLayers': isHorizontal
           ? spacing.x.toString()
           : spacing.y.toString(),
       },
     })
     .catch((e) => {
-      console.log("❌ ELK layout failed", e);
+      console.log('❌ ELK layout failed', e);
     });
 
   if (!layouted?.children) {
     return;
   }
 
-  const layoutedNodePositions = layouted.children.reduce((pre, v) => {
-    pre[v.id] = {
-      x: v.x ?? 0,
-      y: v.y ?? 0,
-    };
-    return pre;
-  }, {} as Record<string, { x: number; y: number }>);
+  const layoutedNodePositions = layouted.children.reduce(
+    (pre, v) => {
+      pre[v.id] = {
+        x: v.x ?? 0,
+        y: v.y ?? 0,
+      };
+      return pre;
+    },
+    {} as Record<string, { x: number; y: number }>,
+  );
 
   return {
     nodes: nodes.map((node) => {
@@ -121,7 +125,7 @@ export const layoutELK = async (
 };
 
 export const kElkAlgorithms: Record<string, LayoutAlgorithm> = Object.keys(
-  algorithms
+  algorithms,
 ).reduce((pre, algorithm) => {
   pre[algorithm] = (props: any) => {
     return layoutELK({ ...props, algorithm });

@@ -1,16 +1,17 @@
-import { graphStratify, sugiyama } from "d3-dag";
-import { getIncomers, type Node } from "@xyflow/react";
+import { getIncomers, type Node } from '@xyflow/react';
+import { graphStratify, sugiyama } from 'd3-dag';
 
-import { ReactflowNodeWithData } from "@/data/types";
-import { LayoutAlgorithm, LayoutAlgorithmProps } from "..";
-import { getEdgeLayouted, getNodeLayouted, getNodeSize } from "../../metadata";
+import type { ReactflowNodeWithData } from '@/data/types';
+
+import { getEdgeLayouted, getNodeLayouted, getNodeSize } from '../../metadata';
+import type { LayoutAlgorithm, LayoutAlgorithmProps } from '..';
 
 type NodeWithPosition = ReactflowNodeWithData & { x: number; y: number };
 
-// Since d3-dag layout algorithm does not support multiple root nodes, 
+// Since d3-dag layout algorithm does not support multiple root nodes,
 // we attach the sub-workflows to the global rootNode.
 const rootNode: NodeWithPosition = {
-  id: "#root",
+  id: '#root',
   x: 0,
   y: 0,
   position: { x: 0, y: 0 },
@@ -18,14 +19,14 @@ const rootNode: NodeWithPosition = {
 };
 
 const algorithms = {
-  "d3-dag": "d3-dag",
-  "ds-dag(s)": "ds-dag(s)",
+  'd3-dag': 'd3-dag',
+  'ds-dag(s)': 'ds-dag(s)',
 };
 
-export type D3DAGLayoutAlgorithms = "d3-dag" | "ds-dag(s)";
+export type D3DAGLayoutAlgorithms = 'd3-dag' | 'ds-dag(s)';
 
 export const layoutD3DAG = async (
-  props: LayoutAlgorithmProps & { algorithm?: D3DAGLayoutAlgorithms }
+  props: LayoutAlgorithmProps & { algorithm?: D3DAGLayoutAlgorithms },
 ) => {
   const {
     nodes,
@@ -33,9 +34,9 @@ export const layoutD3DAG = async (
     direction,
     visibility,
     spacing,
-    algorithm = "d3-dag",
+    algorithm = 'd3-dag',
   } = props;
-  const isHorizontal = direction === "horizontal";
+  const isHorizontal = direction === 'horizontal';
 
   const initialNodes = [] as NodeWithPosition[];
   let maxNodeWidth = 0;
@@ -52,7 +53,7 @@ export const layoutD3DAG = async (
     maxNodeHeight = Math.max(maxNodeHeight, heightWithDefault);
   }
 
-  // Since d3-dag does not support horizontal layout, 
+  // Since d3-dag does not support horizontal layout,
   // we swap the width and height of nodes and interchange x and y mappings based on the layout direction.
   const nodeSize: any = isHorizontal
     ? [maxNodeHeight + spacing.y, maxNodeWidth + spacing.x]
@@ -67,7 +68,7 @@ export const layoutD3DAG = async (
     if (incomers.length < 1) {
       return [rootNode.id];
     }
-    return algorithm === "d3-dag"
+    return algorithm === 'd3-dag'
       ? [incomers[0]?.id]
       : incomers.map((e) => e.id);
   };
@@ -79,7 +80,7 @@ export const layoutD3DAG = async (
         id: node.id,
         parentIds: getParentIds(node),
       };
-    })
+    }),
   );
 
   const layout = sugiyama().nodeSize(nodeSize);
@@ -101,7 +102,7 @@ export const layoutD3DAG = async (
         direction,
         visibility,
         fixPosition: ({ x, y, width, height }) => {
-          // This algorithm uses the center coordinate of the node as the reference point, 
+          // This algorithm uses the center coordinate of the node as the reference point,
           // which needs adjustment for ReactFlow's topLeft coordinate system.
           return {
             x: x - width / 2,
@@ -115,7 +116,7 @@ export const layoutD3DAG = async (
 };
 
 export const kD3DAGAlgorithms: Record<string, LayoutAlgorithm> = Object.keys(
-  algorithms
+  algorithms,
 ).reduce((pre, algorithm) => {
   pre[algorithm] = (props: any) => {
     return layoutD3DAG({ ...props, algorithm });

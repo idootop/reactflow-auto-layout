@@ -1,8 +1,8 @@
-import { Position, XYPosition } from "@xyflow/react";
+import { Position, type XYPosition } from '@xyflow/react';
 
-import { uuid } from "@/utils/uuid";
+import { uuid } from '@/utils/uuid';
 
-import { ControlPoint, HandlePosition } from "./point";
+import type { ControlPoint, HandlePosition } from './point';
 
 export interface ILine {
   start: ControlPoint;
@@ -44,7 +44,7 @@ export const distance = (p1: ControlPoint, p2: ControlPoint) => {
  */
 export const getLineCenter = (
   p1: ControlPoint,
-  p2: ControlPoint
+  p2: ControlPoint,
 ): ControlPoint => {
   return {
     id: uuid(),
@@ -59,7 +59,7 @@ export const getLineCenter = (
 export const isLineContainsPoint = (
   start: ControlPoint,
   end: ControlPoint,
-  p: ControlPoint
+  p: ControlPoint,
 ) => {
   return (
     (start.x === end.x &&
@@ -88,17 +88,17 @@ export const isLineContainsPoint = (
  */
 export function getPathWithRoundCorners(
   points: ControlPoint[],
-  radius: number
+  radius: number,
 ): string {
   if (points.length < 2) {
-    throw new Error("At least 2 points are required.");
+    throw new Error('At least 2 points are required.');
   }
 
   function getRoundCorner(
     center: ControlPoint,
     p1: ControlPoint,
     p2: ControlPoint,
-    radius: number
+    radius: number,
   ) {
     const { x, y } = center;
 
@@ -134,19 +134,19 @@ export function getPathWithRoundCorners(
       path.push(`L ${points[i].x} ${points[i].y}`);
     } else {
       path.push(
-        getRoundCorner(points[i], points[i - 1], points[i + 1], radius)
+        getRoundCorner(points[i], points[i - 1], points[i + 1], radius),
       );
     }
   }
 
-  return path.join(" ");
+  return path.join(' ');
 }
 
 /**
  * Get the longest line segment on the folding line
  */
 export function getLongestLine(
-  points: ControlPoint[]
+  points: ControlPoint[],
 ): [ControlPoint, ControlPoint] {
   let longestLine: [ControlPoint, ControlPoint] = [points[0], points[1]];
   let longestDistance = distance(...longestLine);
@@ -167,7 +167,7 @@ export function getLongestLine(
  */
 export function getLabelPosition(
   points: ControlPoint[],
-  minGap = 20
+  minGap = 20,
 ): XYPosition {
   if (points.length % 2 === 0) {
     // Find the midpoint of the polyline
@@ -191,7 +191,7 @@ export function areLinesPerpendicular(
   p1: ControlPoint,
   p2: ControlPoint,
   p3: ControlPoint,
-  p4: ControlPoint
+  p4: ControlPoint,
 ): boolean {
   return (p1.x === p2.x && p3.y === p4.y) || (p1.y === p2.y && p3.x === p4.x);
 }
@@ -203,7 +203,7 @@ export function areLinesParallel(
   p1: ControlPoint,
   p2: ControlPoint,
   p3: ControlPoint,
-  p4: ControlPoint
+  p4: ControlPoint,
 ) {
   return (p1.x === p2.x && p3.x === p4.x) || (p1.y === p2.y && p3.y === p4.y);
 }
@@ -215,7 +215,7 @@ export function areLinesSameDirection(
   p1: ControlPoint,
   p2: ControlPoint,
   p3: ControlPoint,
-  p4: ControlPoint
+  p4: ControlPoint,
 ) {
   return (
     (p1.x === p2.x && p3.x === p4.x && (p1.y - p2.y) * (p3.y - p4.y) > 0) ||
@@ -230,7 +230,7 @@ export function areLinesReverseDirection(
   p1: ControlPoint,
   p2: ControlPoint,
   p3: ControlPoint,
-  p4: ControlPoint
+  p4: ControlPoint,
 ) {
   return (
     (p1.x === p2.x && p3.x === p4.x && (p1.y - p2.y) * (p3.y - p4.y) < 0) ||
@@ -242,7 +242,7 @@ export function getAngleBetweenLines(
   p1: ControlPoint,
   p2: ControlPoint,
   p3: ControlPoint,
-  p4: ControlPoint
+  p4: ControlPoint,
 ) {
   // Calculate the vectors of the two line segments
   const v1 = { x: p2.x - p1.x, y: p2.y - p1.y };

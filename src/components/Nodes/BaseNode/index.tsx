@@ -1,18 +1,18 @@
-import "./styles.css";
+import './styles.css';
 
-import { ComponentType, memo } from "react";
-import { Handle, NodeProps, Position } from "@xyflow/react";
+import { Handle, type NodeProps, Position } from '@xyflow/react';
+import { type ComponentType, memo } from 'react';
 
-import { ReactflowBaseNode } from "@/data/types";
-import { kReactflowLayoutConfig } from "@/components/ControlPanel";
+import { kReactflowLayoutConfig } from '@/components/ControlPanel';
+import type { ReactflowBaseNode } from '@/data/types';
 
 export const BaseNode: ComponentType<NodeProps<ReactflowBaseNode>> = memo(
   ({ data }) => {
     const { direction, reverseSourceHandles } = kReactflowLayoutConfig.state;
-    const isHorizontal = direction === "horizontal";
-    const targetHandlesFlexDirection: any = isHorizontal ? "column" : "row";
+    const isHorizontal = direction === 'horizontal';
+    const targetHandlesFlexDirection: any = isHorizontal ? 'column' : 'row';
     const sourceHandlesFlexDirection: any =
-      targetHandlesFlexDirection + (reverseSourceHandles ? "-reverse" : "");
+      targetHandlesFlexDirection + (reverseSourceHandles ? '-reverse' : '');
     return (
       <>
         <div
@@ -24,10 +24,10 @@ export const BaseNode: ComponentType<NodeProps<ReactflowBaseNode>> = memo(
           {data.targetHandles.map((id) => (
             <Handle
               className={`handle handle-${direction}`}
-              key={id}
               id={id}
-              type="target"
+              key={id}
               position={isHorizontal ? Position.Left : Position.Top}
+              type="target"
             />
           ))}
         </div>
@@ -41,16 +41,16 @@ export const BaseNode: ComponentType<NodeProps<ReactflowBaseNode>> = memo(
           {data.sourceHandles.map((id) => (
             <Handle
               className={`handle handle-${direction}`}
-              key={id}
               id={id}
-              type="source"
+              key={id}
               position={isHorizontal ? Position.Right : Position.Bottom}
+              type="source"
             />
           ))}
         </div>
       </>
     );
-  }
+  },
 );
 
-BaseNode.displayName = "BaseNode";
+BaseNode.displayName = 'BaseNode';
